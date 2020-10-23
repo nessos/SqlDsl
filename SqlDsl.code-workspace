@@ -1,0 +1,23 @@
+{
+	"folders":[
+		{
+			"path": ".",
+			"name": "SqlDsl"
+		}
+	],
+	"settings": {
+		"files.exclude": {
+			"**/.git": true,
+			"**/.svn": true,
+			"**/.hg": true,
+			"**/CVS": true,
+			"**/.DS_Store": true,
+			"**/.vscode": true, // managed via VS Code
+			"**/.vs": true, // Visual Studio cache
+			"*.sln.DotSettings.user": true, // managed by Resharper
+			"**/.gitmodules": true, // managed by git
+			".config": true, // submodule, managed in its own root
+			"{src,tests}/*/{bin,obj}": true, // build artifacts
+		}
+	}
+}
