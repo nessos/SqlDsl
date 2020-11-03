@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SqlDsl.Core\SqlDsl.Core.csproj" />
+    <ProjectReference Include="..\src\SqlDsl.Core\SqlDsl.Core.csproj" />
   </ItemGroup>
 
 </Project>
