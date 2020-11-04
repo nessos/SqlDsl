@@ -1,7 +1,6 @@
-using SqlDsl.Core;
 using Xunit;
 
-namespace SqlBoolTests
+namespace SqlDsl.Core.Tests
 {
 	public class SqlBoolTests
 	{

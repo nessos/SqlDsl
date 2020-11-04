@@ -1,7 +1,6 @@
-using SqlDsl.Core;
 using Xunit;
 
-namespace SqlNumericTests
+namespace SqlDsl.Core.Tests
 {
 	public class SqlIntTests
 	{
