@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -57,6 +57,20 @@ namespace SqlDsl.Core
         {
             value = this.Value;
         }
+    }
+
+    public class SqlBoolValue : SqlExpr<SqlBool>
+    {
+		public bool Value { get; private set; }
+	    public SqlBoolValue(bool value)
+	    {
+		    Value = value;
+	    }
+
+	    public void Deconstruct(out bool value)
+	    {
+		    value = Value;
+	    }
     }
 
     public class SqlStringConcat : SqlBinExpr<SqlString>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace SqlDsl.Core
 {
@@ -6,4 +6,5 @@ namespace SqlDsl.Core
     public interface SqlString : SqlType { }
     public interface SqlInt : SqlType { }
 
+	public interface SqlBool : SqlType { }
 }
