@@ -1,12 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace SqlDsl.Core
 {
     public interface SqlExpr { }
     
     public interface SqlExpr<TSqlType> : SqlExpr where TSqlType : SqlType { }
+
+    public interface SqlUnaryExpr<TSqlType> : SqlExpr<TSqlType> where TSqlType : SqlType
+    {
+	    SqlExpr<TSqlType> Value { get; }
+    }
 
     public interface SqlBinExpr<TSqlType> : SqlExpr<TSqlType> where TSqlType : SqlType
     {
@@ -73,7 +74,58 @@ namespace SqlDsl.Core
 	    }
     }
 
-    public class SqlStringConcat : SqlBinExpr<SqlString>
+    public class SqlBoolNot : SqlUnaryExpr<SqlBool>
+    {
+	    public SqlExpr<SqlBool> Value { get; }
+
+	    public SqlBoolNot(SqlExpr<SqlBool> value)
+	    {
+		    Value = value;
+	    }
+
+	    public void Deconstruct(out SqlExpr<SqlBool> value)
+	    {
+		    value = Value;
+	    }
+	}
+
+    public class SqlBoolAnd : SqlBinExpr<SqlBool>
+    {
+	    public SqlExpr<SqlBool> Left { get; }
+	    public SqlExpr<SqlBool> Right { get; }
+
+	    public SqlBoolAnd(SqlExpr<SqlBool> left, SqlExpr<SqlBool> right)
+	    {
+		    Left = left;
+		    Right = right;
+	    }
+
+	    public void Deconstruct(out SqlExpr<SqlBool> left, out SqlExpr<SqlBool> right)
+	    {
+		    left = Left;
+		    right = Right;
+	    }
+    }
+
+    public class SqlBoolOr : SqlBinExpr<SqlBool>
+    {
+	    public SqlExpr<SqlBool> Left { get; }
+	    public SqlExpr<SqlBool> Right { get; }
+
+	    public SqlBoolOr(SqlExpr<SqlBool> left, SqlExpr<SqlBool> right)
+	    {
+		    Left = left;
+		    Right = right;
+	    }
+
+	    public void Deconstruct(out SqlExpr<SqlBool> left, out SqlExpr<SqlBool> right)
+	    {
+		    left = Left;
+		    right = Right;
+	    }
+    }
+
+	public class SqlStringConcat : SqlBinExpr<SqlString>
     {
         public SqlExpr<SqlString> Left { get; }
         public SqlExpr<SqlString> Right { get; }
