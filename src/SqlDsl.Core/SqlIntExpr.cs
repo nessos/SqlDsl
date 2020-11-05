@@ -1,6 +1,19 @@
 namespace SqlDsl.Core
 {
- 
+	public class SqlIntPlus : SqlUnaryExpr<SqlInt>
+	{
+		public SqlExpr<SqlInt> Value { get; }
+
+		public SqlIntPlus(SqlExpr<SqlInt> value)
+		{
+			Value = value;
+		}
+
+		public void Deconstruct(out SqlExpr<SqlInt> value)
+		{
+			value = Value;
+		}
+	}
 
     public class SqlIntAdd : SqlBinExpr<SqlInt>
     {

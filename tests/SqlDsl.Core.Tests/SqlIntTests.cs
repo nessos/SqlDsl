@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.ComTypes;
 using Xunit;
 
 namespace SqlDsl.Core.Tests
@@ -32,6 +33,22 @@ namespace SqlDsl.Core.Tests
 			var sql = sqlMult.CompileExpr();
 
 			Assert.Equal($"({left} * {right})", sql);
+		}
+
+		[Fact]
+		public void SqlIntPlusPositiveTest()
+		{
+			// Arrange
+			var value = -32;
+			var valueSql = new SqlIntValue(value);
+
+			var sqlPlus = new SqlIntPlus(valueSql);
+
+			// Act
+			var sql = sqlPlus.CompileExpr();
+
+			// Assert
+			Assert.Equal($"({value})", sql);
 		}
 	}
 }
