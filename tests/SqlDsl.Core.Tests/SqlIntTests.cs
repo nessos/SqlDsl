@@ -50,5 +50,17 @@ namespace SqlDsl.Core.Tests
 			// Assert
 			Assert.Equal($"({value})", sql);
 		}
+
+		[Fact]
+		public void SqlIntAbsTest()
+		{
+			var value = -32;
+			var valueSql = new SqlIntValue(value);
+			var sqlAbs = new SqlIntAbs(valueSql);
+
+			var sql = sqlAbs.CompileExpr();
+
+			Assert.Equal($"(ABS({value}))", sql);
+		}
 	}
 }

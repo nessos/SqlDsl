@@ -47,6 +47,17 @@ namespace SqlDsl.Core
         }
     }
 
+    public class SqlIntAbs : SqlExpr<SqlInt>
+    {
+        public SqlExpr<SqlInt> Value { get; }
+
+        public SqlIntAbs(SqlExpr<SqlInt> value) =>
+            Value = value;
+
+        public void Deconstruct(out SqlExpr<SqlInt> value) =>
+            value = Value;
+    }
+
     public class SqlIntValue : SqlExpr<SqlInt>
     {
         public int Value { get; private set; }

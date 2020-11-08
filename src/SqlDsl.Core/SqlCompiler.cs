@@ -20,6 +20,7 @@ namespace SqlDsl.Core
 				SqlIntAdd(var left, var right) => $"({CompileExpr(left)} + {CompileExpr(right)})",
 				SqlIntMult(var left, var right) => $"({CompileExpr(left)} * {CompileExpr(right)})",
 				SqlIntPlus(var value) => $"({CompileExpr(value)})",
+				SqlIntAbs(var value) => $"(ABS({CompileExpr(value)}))",
 
 				_ => throw new Exception($"Not supported {expr}")
 			};
