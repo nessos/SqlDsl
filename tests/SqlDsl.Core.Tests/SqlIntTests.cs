@@ -20,6 +20,22 @@ namespace SqlDsl.Core.Tests
 			Assert.Equal($"({left} + {right})", sql);
 		}
 
+		[Theory]
+		[InlineData(1,2,"(1 - 2)")]
+		[InlineData(1, -2, "(1 - -2)")]
+		[InlineData(-1, 2, "(-1 - 2)")]
+		[InlineData(-1, -2, "(-1 - -2)")]
+		public void SqlIntSubTest(int left,int right,string expected)
+        {
+			var leftSql = new SqlIntValue(left);
+			var rightSql = new SqlIntValue(right);
+			var sqlSub = new SqlIntSub(leftSql, rightSql);
+
+			var sql = sqlSub.CompileExpr();
+
+			Assert.Equal(expected, sql);
+		}
+
 		[Fact]
 		public void SqlIntMultTest()
 		{
