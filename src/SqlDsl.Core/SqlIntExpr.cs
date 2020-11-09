@@ -15,6 +15,19 @@ namespace SqlDsl.Core
 		}
 	}
 
+    public class SqlIntMinus : SqlUnaryExpr<SqlInt>
+    {
+        public SqlExpr<SqlInt> Value { get;}
+        public SqlIntMinus(SqlExpr<SqlInt> value)
+        {
+            Value = value;
+        }
+        public void Deconstruct(out SqlExpr<SqlInt> value)
+        {
+            value = Value;
+        }
+    }
+
     public class SqlIntAdd : SqlBinExpr<SqlInt>
     {
         public SqlExpr<SqlInt> Left { get; }
@@ -59,7 +72,4 @@ namespace SqlDsl.Core
             value = this.Value;
         }
     }
-
- 
-
 }
