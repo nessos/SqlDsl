@@ -18,6 +18,7 @@ namespace SqlDsl.Core
 
 				// Expressions - Numeric
 				SqlIntAdd(var left, var right) => $"({CompileExpr(left)} + {CompileExpr(right)})",
+				SqlIntSub(var left, var right) => $"({CompileExpr(left)} - {CompileExpr(right)})",
 				SqlIntMult(var left, var right) => $"({CompileExpr(left)} * {CompileExpr(right)})",
 				SqlIntPlus(var value) => $"({CompileExpr(value)})",
 
