@@ -10,6 +10,7 @@ namespace SqlDsl.Core
 				// Values
 				SqlIntValue(var value) => value.ToString(),
 				SqlBoolValue(var value) => value.ToString().ToUpper(),
+				SqlStringValue(var value) => $"'{value}'",
 
 				// Expressions - Boolean
 				SqlBoolNot(var value) => $"NOT ({CompileExpr(value)})",
@@ -19,6 +20,9 @@ namespace SqlDsl.Core
 				// Expressions - Numeric
 				SqlIntAdd(var left, var right) => $"({CompileExpr(left)} + {CompileExpr(right)})",
 				SqlIntMult(var left, var right) => $"({CompileExpr(left)} * {CompileExpr(right)})",
+
+				// Expressions - String
+				SqlStringConcat(var left, var right) => $"{CompileExpr(left)} + {CompileExpr(right)}",
 
 				_ => throw new Exception($"Not supported {expr}")
 			};
