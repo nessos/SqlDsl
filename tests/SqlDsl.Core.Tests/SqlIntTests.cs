@@ -14,7 +14,7 @@ namespace SqlDsl.Core.Tests
 
 			var sql = value.CompileExpr();
 
-			Assert.Equal(sql, expected);
+			Assert.Equal(expected,sql);
         }
 
 		[Fact]
