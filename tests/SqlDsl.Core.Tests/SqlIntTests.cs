@@ -5,6 +5,19 @@ namespace SqlDsl.Core.Tests
 {
 	public class SqlIntTests
 	{
+		[Theory]
+		[InlineData(-32, "-32")]
+		[InlineData(32,"32")]
+		[InlineData(0, "0")]
+		public void SqlIntValueTest(int input,string expected)
+        {
+			var value = new SqlIntValue(input);
+
+			var sql = value.CompileExpr();
+
+			Assert.Equal(expected,sql);
+        }
+
 		[Fact]
 		public void SqlIntAddTest()
 		{
