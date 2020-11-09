@@ -66,5 +66,19 @@ namespace SqlDsl.Core.Tests
 			// Assert
 			Assert.Equal($"({value})", sql);
 		}
+
+		[Theory]
+		[InlineData(32,"(ABS(32))")]
+		[InlineData(-32, "(ABS(-32))")]
+		[InlineData(0, "(ABS(0))")]
+		public void SqlIntAbsTest(int testValue,string expected)
+		{
+			var valueSql = new SqlIntValue(testValue);
+			var sqlAbs = new SqlIntAbs(valueSql);
+
+			var sql = sqlAbs.CompileExpr();
+
+			Assert.Equal(expected, sql);
+		}
 	}
 }
