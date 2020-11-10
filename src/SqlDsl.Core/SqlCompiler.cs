@@ -20,6 +20,11 @@ namespace SqlDsl.Core
 				SqlIntAdd(var left, var right) => $"({CompileExpr(left)} + {CompileExpr(right)})",
 				SqlIntMult(var left, var right) => $"({CompileExpr(left)} * {CompileExpr(right)})",
 
+				// Expressions - String
+				SqlStringValue(var value) => $"'{value}'",
+				SqlStringToUpper(var value) => $"{CompileExpr(value).ToUpper()}",
+				SqlStringToLower(var value) => $"{CompileExpr(value).ToLower()}" ,
+
 				_ => throw new Exception($"Not supported {expr}")
 			};
 	}
