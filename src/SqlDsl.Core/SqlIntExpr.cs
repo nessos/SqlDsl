@@ -1,8 +1,8 @@
 namespace SqlDsl.Core
 {
- 
 
-    public class SqlIntAdd : SqlBinExpr<SqlInt>
+
+    public class SqlIntAdd : SqlExprInt, SqlBinExpr<SqlInt>
     {
         public SqlExpr<SqlInt> Left { get; }
         public SqlExpr<SqlInt> Right { get; }
@@ -18,7 +18,7 @@ namespace SqlDsl.Core
         }
     }
 
-    public class SqlIntMult : SqlBinExpr<SqlInt>
+    public class SqlIntMult : SqlExprInt, SqlBinExpr<SqlInt>
     {
         public SqlExpr<SqlInt> Left { get; }
         public SqlExpr<SqlInt> Right { get; }
@@ -34,7 +34,7 @@ namespace SqlDsl.Core
         }
     }
 
-    public class SqlIntValue : SqlExpr<SqlInt>
+    public class SqlIntValue : SqlExprInt
     {
         public int Value { get; private set; }
         public SqlIntValue(int v)
