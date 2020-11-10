@@ -23,8 +23,8 @@ namespace SqlDsl.Core
 
 				// Expressions - String
 				SqlStringConcat(var left, var right) => $"{CompileExpr(left)} + {CompileExpr(right)}",
-				SqlStringToUpper(var value) => $"(UPPER({CompileExpr(value)}))",
-				SqlStringToLower(var value) => $"(LOWER({CompileExpr(value)}))",
+				SqlStringToUpper(var value) => $"UPPER({CompileExpr(value)})",
+				SqlStringToLower(var value) => $"LOWER({CompileExpr(value)})",
 
 				_ => throw new Exception($"Not supported {expr}")
 			};

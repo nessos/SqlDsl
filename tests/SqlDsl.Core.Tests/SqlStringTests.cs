@@ -27,7 +27,7 @@ namespace SqlDsl.Core.Tests
 			var sqlToUpper = new SqlStringToUpper(sqlStr);
 			var sql = sqlToUpper.CompileExpr();
 
-			Assert.Equal($"(UPPER('{value}'))", sql);
+			Assert.Equal($"UPPER('{value}')", sql);
 		}
 
 		[Fact]
@@ -39,7 +39,7 @@ namespace SqlDsl.Core.Tests
 			var sqlToLower = new SqlStringToLower(sqlStr);
 			var sql = sqlToLower.CompileExpr();
 
-			Assert.Equal($"(LOWER('{value}'))", sql);
+			Assert.Equal($"LOWER('{value}')", sql);
 		}
 	}
 }
