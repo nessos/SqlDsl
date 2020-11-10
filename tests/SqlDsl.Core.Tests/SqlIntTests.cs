@@ -79,7 +79,19 @@ namespace SqlDsl.Core.Tests
 			// Assert
 			Assert.Equal($"({value})", sql);
 		}
+		[Fact]
+		public void SqlIntMinusTest()
+    {
+			var value = -32;
+			var valueSql = new SqlIntValue(value);
 
+			var sqlMinus = new SqlIntMinus(valueSql);
+
+			var sql = sqlMinus.CompileExpr();
+
+			Assert.Equal($"(-({value}))", sql);
+    }
+    
 		[Theory]
 		[InlineData(32,"(ABS(32))")]
 		[InlineData(-32, "(ABS(-32))")]
