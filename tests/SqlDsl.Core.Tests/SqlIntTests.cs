@@ -5,6 +5,19 @@ namespace SqlDsl.Core.Tests
 {
 	public class SqlIntTests
 	{
+		[Theory]
+		[InlineData(-32, "-32")]
+		[InlineData(32,"32")]
+		[InlineData(0, "0")]
+		public void SqlIntValueTest(int input,string expected)
+        {
+			var value = new SqlIntValue(input);
+
+			var sql = value.CompileExpr();
+
+			Assert.Equal(expected,sql);
+        }
+
 		[Fact]
 		public void SqlIntAddTest()
 		{
@@ -18,6 +31,22 @@ namespace SqlDsl.Core.Tests
 			var sql = sqlAdd.CompileExpr();
 
 			Assert.Equal($"({left} + {right})", sql);
+		}
+
+		[Theory]
+		[InlineData(1,2,"(1 - 2)")]
+		[InlineData(1, -2, "(1 - -2)")]
+		[InlineData(-1, 2, "(-1 - 2)")]
+		[InlineData(-1, -2, "(-1 - -2)")]
+		public void SqlIntSubTest(int left,int right,string expected)
+        {
+			var leftSql = new SqlIntValue(left);
+			var rightSql = new SqlIntValue(right);
+			var sqlSub = new SqlIntSub(leftSql, rightSql);
+
+			var sql = sqlSub.CompileExpr();
+
+			Assert.Equal(expected, sql);
 		}
 
 		[Fact]
@@ -50,10 +79,9 @@ namespace SqlDsl.Core.Tests
 			// Assert
 			Assert.Equal($"({value})", sql);
 		}
-
 		[Fact]
 		public void SqlIntMinusTest()
-        {
+    {
 			var value = -32;
 			var valueSql = new SqlIntValue(value);
 
@@ -62,6 +90,20 @@ namespace SqlDsl.Core.Tests
 			var sql = sqlMinus.CompileExpr();
 
 			Assert.Equal($"(-({value}))", sql);
-        }
+    }
+    
+		[Theory]
+		[InlineData(32,"(ABS(32))")]
+		[InlineData(-32, "(ABS(-32))")]
+		[InlineData(0, "(ABS(0))")]
+		public void SqlIntAbsTest(int testValue,string expected)
+		{
+			var valueSql = new SqlIntValue(testValue);
+			var sqlAbs = new SqlIntAbs(valueSql);
+
+			var sql = sqlAbs.CompileExpr();
+
+			Assert.Equal(expected, sql);
+		}
 	}
 }
