@@ -28,4 +28,34 @@ namespace SqlDsl.Core
             right = this.Right;
         }
     }
+
+    public class SqlStringToUpper : SqlExpr<SqlString>
+    {
+        public SqlExpr<SqlString> Value { get; }
+        public SqlStringToUpper(SqlExpr<SqlString> value)
+        {
+            this.Value = value;
+        }
+
+        public void Deconstruct(out SqlExpr<SqlString> value)
+        {
+            value = this.Value;
+        }
+    }
+
+    public class SqlStringToLower : SqlExpr<SqlString>
+    {
+        public SqlExpr<SqlString> Value { get; }
+        public SqlStringToLower(SqlExpr<SqlString> value)
+        {
+            this.Value = value;
+        }
+
+        public void Deconstruct(out SqlExpr<SqlString> value)
+        {
+            value = this.Value;
+        }
+    }
+
+
 }
