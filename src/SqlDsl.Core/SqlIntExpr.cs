@@ -76,6 +76,77 @@ namespace SqlDsl.Core
         }
     }
 
+    public class SqlIntGreater : SqlBinExpr<SqlInt>
+    {
+        public SqlExpr<SqlInt> Left { get; }
+        public SqlExpr<SqlInt> Right { get; }
+
+        public SqlIntGreater(SqlExpr<SqlInt> left, SqlExpr<SqlInt> right)
+        {
+            Left = left;
+            Right = right;
+        }
+
+        public void Deconstruct(out SqlExpr<SqlInt> left, out SqlExpr<SqlInt> right)
+        {
+            left = Left;
+            right = Right;
+        }
+    }
+
+    public class SqlIntGreaterOrEqual : SqlBinExpr<SqlInt>
+    {
+        public SqlExpr<SqlInt> Left { get; }
+        public SqlExpr<SqlInt> Right { get; }
+
+        public SqlIntGreaterOrEqual(SqlExpr<SqlInt> left, SqlExpr<SqlInt> right)
+        {
+            Left = left;
+            Right = right;
+        }
+
+        public void Deconstruct(out SqlExpr<SqlInt> left, out SqlExpr<SqlInt> right)
+        {
+            left = Left;
+            right = Right;
+        }
+    }
+    public class SqlIntLesser : SqlBinExpr<SqlInt>
+    {
+        public SqlExpr<SqlInt> Left { get; }
+        public SqlExpr<SqlInt> Right { get; }
+
+        public SqlIntLesser(SqlExpr<SqlInt> left, SqlExpr<SqlInt> right)
+        {
+            Left = left;
+            Right = right;
+        }
+
+        public void Deconstruct(out SqlExpr<SqlInt> left, out SqlExpr<SqlInt> right)
+        {
+            left = Left;
+            right = Right;
+        }
+    }
+
+    public class SqlIntLesserOrEqual : SqlBinExpr<SqlInt>
+    {
+        public SqlExpr<SqlInt> Left { get; }
+        public SqlExpr<SqlInt> Right { get; }
+
+        public SqlIntLesserOrEqual(SqlExpr<SqlInt> left, SqlExpr<SqlInt> right)
+        {
+            Left = left;
+            Right = right;
+        }
+
+        public void Deconstruct(out SqlExpr<SqlInt> left, out SqlExpr<SqlInt> right)
+        {
+            left = Left;
+            right = Right;
+        }
+    }
+
     public class SqlIntAbs : SqlExpr<SqlInt>
     {
         public SqlExpr<SqlInt> Value { get; }

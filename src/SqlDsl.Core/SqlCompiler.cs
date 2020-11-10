@@ -22,6 +22,11 @@ namespace SqlDsl.Core
 				SqlIntMult(var left, var right) => $"({CompileExpr(left)} * {CompileExpr(right)})",
 				SqlIntPlus(var value) => $"({CompileExpr(value)})",
 				SqlIntMinus(var value) => $"(-({CompileExpr(value)}))",
+				SqlIntGreater(var left, var right) => $"({CompileExpr(left)} > {CompileExpr(right)})",
+				SqlIntGreaterOrEqual(var left, var right) => $"({CompileExpr(left)} >= {CompileExpr(right)})",
+				SqlIntLesser(var left, var right) => $"({CompileExpr(left)} < {CompileExpr(right)})",
+				SqlIntLesserOrEqual(var left, var right) => $"({CompileExpr(left)} <= {CompileExpr(right)})",
+
 				SqlIntAbs(var value) => $"(ABS({CompileExpr(value)}))",
           
 				_ => throw new Exception($"Not supported {expr}")

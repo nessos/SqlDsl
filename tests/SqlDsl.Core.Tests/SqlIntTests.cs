@@ -105,5 +105,55 @@ namespace SqlDsl.Core.Tests
 
 			Assert.Equal(expected, sql);
 		}
+
+		[Fact]
+		public void SqlIntGreater()
+		{
+			var left = 1; var right = 2;
+			var leftSql = new SqlIntValue(left);
+			var rightSql = new SqlIntValue(right);
+			var sqlSub = new SqlIntGreater(leftSql, rightSql);
+
+			var sql = sqlSub.CompileExpr();
+
+			Assert.Equal($"({left} > {right})", sql);
+		}
+		[Fact]
+		public void SqlIntGreaterOrEqual()
+		{
+			var left = 1; var right = 2;
+			var leftSql = new SqlIntValue(left);
+			var rightSql = new SqlIntValue(right);
+			var sqlSub = new SqlIntGreaterOrEqual(leftSql, rightSql);
+
+			var sql = sqlSub.CompileExpr();
+
+			Assert.Equal($"({left} >= {right})", sql);
+		}
+		[Fact]
+		public void SqlIntLesser()
+		{
+			var left = 1; var right = 2;
+			var leftSql = new SqlIntValue(left);
+			var rightSql = new SqlIntValue(right);
+			var sqlSub = new SqlIntLesser(leftSql, rightSql);
+
+			var sql = sqlSub.CompileExpr();
+
+			Assert.Equal($"({left} < {right})", sql);
+		}
+
+		[Fact]
+		public void SqlIntLesserOrEqual()
+		{
+			var left = 1; var right = 2;
+			var leftSql = new SqlIntValue(left);
+			var rightSql = new SqlIntValue(right);
+			var sqlSub = new SqlIntLesserOrEqual(leftSql, rightSql);
+
+			var sql = sqlSub.CompileExpr();
+
+			Assert.Equal($"({left} <= {right})", sql);
+		}
 	}
 }
