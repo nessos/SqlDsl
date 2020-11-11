@@ -1,0 +1,69 @@
+resources:
+  repositories:
+    - repository: self
+      checkoutOptions:
+        submodules: true
+        lfs: true
+trigger:
+  batch: true
+  branches:
+    include:
+      - master
+      - develop
+      - feature/*
+      - bugfix/*
+  paths:
+    include:
+      - azure-pipelines.yml
+      - src/*
+      - tests/*
+jobs:
+  - job: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - checkout: self
+        fetchDepth: 1
+      - task: DotNetCoreCLI@2
+        displayName: "Restore Nugets"
+        inputs:
+          command: 'restore'
+      - task: DotNetCoreCLI@2
+        displayName: "Compile project"
+        inputs:
+          command: 'build'
+          configuration: 'Release'
+          arguments: '-o $(build.artifactStagingDirectory)/build'
+          versioningScheme: byBuildNumber
+      - task: PublishBuildArtifacts@1
+        displayName: Publish Build
+        inputs:
+          PathtoPublish: $(build.artifactStagingDirectory)/build
+          ArtifactName: 'drop'
+          publishLocation: 'Container'
+      - task: DotNetCoreCLI@2
+        displayName: Test Solution
+        inputs:
+          command: 'test'
+          configuration: 'Debug'
+          arguments: '--logger trx /p:CollectCoverage=true'
+          publishTestResults: true
+          verbosityPack: Minimal
+          verbosityRestore: Minimal
+          testRunTitle: 'Unit Tests'
+      - task: DotNetCoreCLI@2
+        displayName: Pack Nugets
+        inputs:
+          command: 'pack'
+          packagesToPack: 'src/*/*.csproj'
+          packDirectory: '$(build.artifactStagingDirectory)/nuget'
+          configuration: $(BuildConfiguration)
+          versioningScheme: byBuildNumber
+          verbosityRestore: Minimal
+          verbosityPack: Minimal
+      - task: PublishBuildArtifacts@1
+        displayName: Publish Nugets
+        inputs:
+          PathtoPublish: '$(build.artifactStagingDirectory)/nuget'
+          ArtifactName: 'nuget'
+          publishLocation: 'Container'
