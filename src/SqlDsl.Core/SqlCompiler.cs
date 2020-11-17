@@ -35,15 +35,18 @@ namespace SqlDsl.Core
 				SqlBoolAnd(var left, var right) => $"({EmitExpr(left)} AND {EmitExpr(right)})",
 				SqlBoolOr(var left, var right) => $"({EmitExpr(left)} OR {EmitExpr(right)})",
 
-				// Expressions - Numeric
-				SqlIntAdd(var left, var right) => $"({EmitExpr(left)} + {EmitExpr(right)})",
-				SqlIntMult(var left, var right) => $"({EmitExpr(left)} * {EmitExpr(right)})",
-
-				// Expressions - String
-				SqlStringValue(var value) => $"'{value}'",
+        SqlStringValue(var value) => $"'{value}'",
 				SqlStringToUpper(var value) => $"{EmitExpr(value).ToUpper()}",
 				SqlStringToLower(var value) => $"{EmitExpr(value).ToLower()}" ,
-
+          
+				// Expressions - Numeric
+				SqlIntAdd(var left, var right) => $"({CompileExpr(left)} + {CompileExpr(right)})",
+				SqlIntSub(var left, var right) => $"({CompileExpr(left)} - {CompileExpr(right)})",
+				SqlIntMult(var left, var right) => $"({CompileExpr(left)} * {CompileExpr(right)})",
+				SqlIntPlus(var value) => $"({CompileExpr(value)})",
+				SqlIntMinus(var value) => $"(-({CompileExpr(value)}))",
+				SqlIntAbs(var value) => $"(ABS({CompileExpr(value)}))",
+          
 				_ => throw new Exception($"Not supported {expr}")
 			};
 		public static string CompileExpr(this SqlExpr expr) => EmitExpr(MultiOptimizer(expr));

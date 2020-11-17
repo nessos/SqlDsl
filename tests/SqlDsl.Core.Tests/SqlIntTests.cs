@@ -1,9 +1,23 @@
+using System.Runtime.InteropServices.ComTypes;
 using Xunit;
 
 namespace SqlDsl.Core.Tests
 {
 	public class SqlIntTests
 	{
+		[Theory]
+		[InlineData(-32, "-32")]
+		[InlineData(32,"32")]
+		[InlineData(0, "0")]
+		public void SqlIntValueTest(int input,string expected)
+        {
+			var value = new SqlIntValue(input);
+
+			var sql = value.CompileExpr();
+
+			Assert.Equal(expected,sql);
+        }
+
 		[Fact]
 		public void SqlIntAddTest()
 		{
@@ -19,6 +33,22 @@ namespace SqlDsl.Core.Tests
 			Assert.Equal($"({left} + {right})", sql);
 		}
 
+		[Theory]
+		[InlineData(1,2,"(1 - 2)")]
+		[InlineData(1, -2, "(1 - -2)")]
+		[InlineData(-1, 2, "(-1 - 2)")]
+		[InlineData(-1, -2, "(-1 - -2)")]
+		public void SqlIntSubTest(int left,int right,string expected)
+        {
+			var leftSql = new SqlIntValue(left);
+			var rightSql = new SqlIntValue(right);
+			var sqlSub = new SqlIntSub(leftSql, rightSql);
+
+			var sql = sqlSub.CompileExpr();
+
+			Assert.Equal(expected, sql);
+		}
+
 		[Fact]
 		public void SqlIntMultTest()
 		{
@@ -32,6 +62,48 @@ namespace SqlDsl.Core.Tests
 			var sql = sqlMult.CompileExpr();
 
 			Assert.Equal($"({left} * {right})", sql);
+		}
+
+		[Fact]
+		public void SqlIntPlusPositiveTest()
+		{
+			// Arrange
+			var value = -32;
+			var valueSql = new SqlIntValue(value);
+
+			var sqlPlus = new SqlIntPlus(valueSql);
+
+			// Act
+			var sql = sqlPlus.CompileExpr();
+
+			// Assert
+			Assert.Equal($"({value})", sql);
+		}
+		[Fact]
+		public void SqlIntMinusTest()
+    {
+			var value = -32;
+			var valueSql = new SqlIntValue(value);
+
+			var sqlMinus = new SqlIntMinus(valueSql);
+
+			var sql = sqlMinus.CompileExpr();
+
+			Assert.Equal($"(-({value}))", sql);
+    }
+    
+		[Theory]
+		[InlineData(32,"(ABS(32))")]
+		[InlineData(-32, "(ABS(-32))")]
+		[InlineData(0, "(ABS(0))")]
+		public void SqlIntAbsTest(int testValue,string expected)
+		{
+			var valueSql = new SqlIntValue(testValue);
+			var sqlAbs = new SqlIntAbs(valueSql);
+
+			var sql = sqlAbs.CompileExpr();
+
+			Assert.Equal(expected, sql);
 		}
 	}
 }
