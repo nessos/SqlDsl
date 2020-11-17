@@ -3,19 +3,20 @@ using SqlDsl.Core;
 
 namespace SqlDsl.ConsoleApp
 {
+    
     class Program
     {
         static void Main(string[] args)
         {
-            SqlExpr<SqlInt> first = new SqlIntValue(1);
-            SqlExpr<SqlInt> second = new SqlIntValue(3);
-            var add = new SqlIntAdd(first, new SqlIntMult(first, second));
 
-
+            Func<SqlExprInt, SqlExprInt> f = x => 1 + x + 1 + 1 + 1 + 1;
             
-            
+            var expr = f(1);
 
-            Console.WriteLine(SqlCompiler.CompileExpr(add));
+
+
+            Console.WriteLine(SqlCompiler.CompileExpr(expr));
+
         }
     }
 }

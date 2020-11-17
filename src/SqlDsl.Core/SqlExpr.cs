@@ -14,4 +14,10 @@ namespace SqlDsl.Core
         SqlExpr<TSqlType> Left { get; }
         SqlExpr<TSqlType> Right { get; }
     }
+
+    public record SqlExprInt : SqlExpr<SqlInt>
+    {
+        public static SqlExprInt operator +(SqlExprInt a, SqlExprInt b) => new SqlIntAdd(a, b);
+        public static implicit operator SqlExprInt(int x) => new SqlIntValue(x);
+    }
 }
