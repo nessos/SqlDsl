@@ -1,52 +1,7 @@
 namespace SqlDsl.Core
 {
-
-
-    public class SqlIntAdd : SqlExprInt, SqlBinExpr<SqlInt>
-    {
-        public SqlExpr<SqlInt> Left { get; }
-        public SqlExpr<SqlInt> Right { get; }
-        public SqlIntAdd(SqlExpr<SqlInt> left, SqlExpr<SqlInt> right)
-        {
-            this.Left = left;
-            this.Right = right;
-        }
-        public void Deconstruct(out SqlExpr<SqlInt> left, out SqlExpr<SqlInt> right)
-        {
-            left = this.Left;
-            right = this.Right;
-        }
-    }
-
-    public class SqlIntMult : SqlExprInt, SqlBinExpr<SqlInt>
-    {
-        public SqlExpr<SqlInt> Left { get; }
-        public SqlExpr<SqlInt> Right { get; }
-        public SqlIntMult(SqlExpr<SqlInt> left, SqlExpr<SqlInt> right)
-        {
-            this.Left = left;
-            this.Right = right;
-        }
-        public void Deconstruct(out SqlExpr<SqlInt> left, out SqlExpr<SqlInt> right)
-        {
-            left = this.Left;
-            right = this.Right;
-        }
-    }
-
-    public class SqlIntValue : SqlExprInt
-    {
-        public int Value { get; private set; }
-        public SqlIntValue(int v)
-        {
-            this.Value = v;
-        }
-        public void Deconstruct(out int value)
-        {
-            value = this.Value;
-        }
-    }
-
- 
+    public record SqlIntAdd(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprInt, SqlBinExpr<SqlInt>;
+    public record SqlIntMult(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprInt, SqlBinExpr<SqlInt>;
+    public record SqlIntValue(int Value) : SqlExprInt;
 
 }
