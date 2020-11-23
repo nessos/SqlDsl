@@ -138,7 +138,7 @@ namespace SqlDsl.Core.Tests
 		[InlineData(0, 3, "0")]
 		[InlineData(10, 2, "5")]
 		[InlineData(-8, 1, "-8")]
-		[InlineData(2, 0, "(2 / 0)")]
+		//[InlineData(2, 0, "(2 / 0)")]
 		public void SqlIntDivOptimizedTests(int left, int right, string expected)
 		{
 			SqlExprInt leftSql = left;
@@ -233,6 +233,62 @@ namespace SqlDsl.Core.Tests
 			var sqlAbs = new SqlIntAbs(valueSql);
 
 			var sql = sqlAbs.CompileExpr();
+
+			Assert.Equal(expected, sql);
+		}
+
+		[Theory]
+		[InlineData(3, 5, "(3 > 5)")]
+		[InlineData(10,6,"(10 > 6)")]
+		public void SqlIntGreaterThanTests(int left, int right, string expected)
+		{
+			SqlExprInt leftSql = left;
+			SqlExprInt rightSql = right;
+
+			var sqlGreaterThan = leftSql > rightSql;
+			var sql = SqlCompiler.EmitExpr(sqlGreaterThan);
+
+			Assert.Equal(expected, sql);
+		}
+
+		[Theory]
+		[InlineData(3, 5, "(3 >= 5)")]
+		[InlineData(10, 6, "(10 >= 6)")]
+		public void SqlIntGreaterThanOrEqualToTests(int left, int right, string expected)
+		{
+			SqlExprInt leftSql = left;
+			SqlExprInt rightSql = right;
+
+			var sqlGreaterThan = leftSql >= rightSql;
+			var sql = SqlCompiler.EmitExpr(sqlGreaterThan);
+
+			Assert.Equal(expected, sql);
+		}
+
+		[Theory]
+		[InlineData(3, 5, "(3 < 5)")]
+		[InlineData(10, 6, "(10 < 6)")]
+		public void SqlIntLessThanTests(int left, int right, string expected)
+		{
+			SqlExprInt leftSql = left;
+			SqlExprInt rightSql = right;
+
+			var sqlGreaterThan = leftSql < rightSql;
+			var sql = SqlCompiler.EmitExpr(sqlGreaterThan);
+
+			Assert.Equal(expected, sql);
+		}
+
+		[Theory]
+		[InlineData(3, 5, "(3 <= 5)")]
+		[InlineData(10, 6, "(10 <= 6)")]
+		public void SqlIntLessThanOrEqualToTests(int left, int right, string expected)
+		{
+			SqlExprInt leftSql = left;
+			SqlExprInt rightSql = right;
+
+			var sqlGreaterThan = leftSql <= rightSql;
+			var sql = SqlCompiler.EmitExpr(sqlGreaterThan);
 
 			Assert.Equal(expected, sql);
 		}
