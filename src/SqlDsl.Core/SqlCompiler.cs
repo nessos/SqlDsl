@@ -18,9 +18,9 @@ namespace SqlDsl.Core
 		public static SqlExpr MultiOptimizer(SqlExpr expr)
 		{
 			var optExpr = OptimizeExpr(expr);
-			if (expr == optExpr)
-				return optExpr;
-			else return MultiOptimizer(optExpr);
+			return expr == optExpr 
+				? optExpr 
+				: MultiOptimizer(optExpr);
 		}
 
 		private static string EmitExpr(SqlExpr expr) =>
@@ -35,7 +35,7 @@ namespace SqlDsl.Core
 				SqlBoolAnd(var left, var right) => $"({EmitExpr(left)} AND {EmitExpr(right)})",
 				SqlBoolOr(var left, var right) => $"({EmitExpr(left)} OR {EmitExpr(right)})",
 
-				SqlStringValue(var value) => $"'{value}'",
+        SqlStringValue(var value) => $"'{value}'",
 				SqlStringToUpper(var value) => $"{EmitExpr(value).ToUpper()}",
 				SqlStringToLower(var value) => $"{EmitExpr(value).ToLower()}" ,
           
