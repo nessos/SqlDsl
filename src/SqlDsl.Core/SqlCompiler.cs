@@ -88,6 +88,11 @@ namespace SqlDsl.Core
 				SqlIntMinus(var value) => $"(-({CompileExpr(value)}))",
 				SqlIntAbs(var value) => $"(ABS({CompileExpr(value)}))",
 
+				SqlIntGreaterThan(var left, var right) => $"({CompileExpr(left)} > {CompileExpr(right)})",
+				SqlIntGreaterThanOrEqualTo(var left, var right) => $"({CompileExpr(left)} >= {CompileExpr(right)})",
+				SqlIntLessThan(var left, var right) => $"({CompileExpr(left)} < {CompileExpr(right)})",
+				SqlIntLessThanOrEqualTo(var left, var right) => $"({CompileExpr(left)} <= {CompileExpr(right)})",
+
 				_ => throw new Exception($"Not supported {expr}")
 			};
 

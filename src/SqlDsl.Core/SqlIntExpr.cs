@@ -15,4 +15,13 @@ namespace SqlDsl.Core
 	public record SqlIntMult(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprInt, SqlBinExpr<SqlInt>;
 
 	public record SqlIntDiv(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprInt, SqlBinExpr<SqlInt>;
+
+	public record SqlIntGreaterThan(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprInt, SqlBinExpr<SqlInt>;
+
+	public record SqlIntGreaterThanOrEqualTo(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprInt,
+		SqlBinExpr<SqlInt>;
+
+	public record SqlIntLessThan(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprInt, SqlBinExpr<SqlInt>;
+
+	public record SqlIntLessThanOrEqualTo(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprInt, SqlBinExpr<SqlInt>;
 }
