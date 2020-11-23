@@ -85,5 +85,48 @@ namespace SqlDsl.Core.Tests
 			Assert.Equal("TRUE", notFalse.CompileExpr());
 			Assert.Equal("FALSE", notTrue.CompileExpr());
 		}
+
+		[Fact]
+		public void SqlBoolValsImplicitTests()
+		{
+			SqlExprBool sqlTrue = true;
+			SqlExprBool sqlFalse = false;
+
+			Assert.Equal("TRUE", sqlTrue.CompileExpr());
+			Assert.Equal("FALSE", sqlFalse.CompileExpr());
+		}
+
+		[Fact]
+		public void SqlImplicitAndTest()
+		{
+			SqlExprBool left = true;
+			SqlExprBool right = false;
+			var and = left & right;
+
+			Assert.Equal("(TRUE AND FALSE)", SqlCompiler.EmitExpr(and));
+		}
+
+		[Fact]
+		public void SqlImplicitOrTest()
+		{
+			SqlExprBool left = true;
+			SqlExprBool right = false;
+			var or = left | right;
+
+			Assert.Equal("(TRUE OR FALSE)", SqlCompiler.EmitExpr(or));
+		}
+
+		[Fact]
+		public void SqlImplicitNotTest()
+		{
+			SqlExprBool left = true;
+			SqlExprBool right = false;
+
+			var notLeft = SqlCompiler.EmitExpr(!left);
+			var notRight = !right;
+
+			Assert.Equal("NOT (TRUE)", notLeft);
+			Assert.Equal("NOT (FALSE)", SqlCompiler.EmitExpr(!right));
+		}
 	}
 }
