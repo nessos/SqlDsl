@@ -31,7 +31,10 @@ namespace SqlDsl.Core
 
 	public record SqlExprInt : SqlExpr<SqlInt>
 	{
-		public static SqlExprInt operator +(SqlExprInt a, SqlExprInt b) => new SqlIntAdd(a, b);
 		public static implicit operator SqlExprInt(int x) => new SqlIntValue(x);
+		public static SqlExprInt operator +(SqlExprInt left, SqlExprInt right) => new SqlIntAdd(left, right);
+		public static SqlExprInt operator -(SqlExprInt left, SqlExprInt right) => new SqlIntSub(left, right);
+		public static SqlExprInt operator *(SqlExprInt left, SqlExprInt right) => new SqlIntMult(left, right);
+		public static SqlExprInt operator /(SqlExprInt left, SqlExprInt right) => new SqlIntDiv(left, right);
 	}
 }
