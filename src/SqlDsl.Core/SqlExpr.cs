@@ -19,12 +19,14 @@ namespace SqlDsl.Core
 		SqlExpr<TSqlType> Right { get; }
 	}
 
-	public record SqlExprBool : SqlExpr<SqlBool>
+	public abstract record SqlExprBool : SqlExpr<SqlBool>
 	{
 		public static implicit operator SqlExprBool(bool value) => new SqlBoolValue(value);
 		public static SqlExprBool operator &(SqlExprBool left, SqlExprBool right) => new SqlBoolAnd(left, right);
 		public static SqlExprBool operator |(SqlExprBool left, SqlExprBool right) => new SqlBoolOr(left, right);
 		public static SqlExprBool operator !(SqlExprBool value) => new SqlBoolNot(value);
+		public static bool operator false(SqlExprBool _) => false;
+		public static bool operator true(SqlExprBool _) => false;
 	}
 
 	public record SqlExprInt : SqlExpr<SqlInt>

@@ -101,7 +101,7 @@ namespace SqlDsl.Core.Tests
 		{
 			SqlExprBool left = true;
 			SqlExprBool right = false;
-			var and = left & right;
+			var and = left && right;
 
 			Assert.Equal("(TRUE AND FALSE)", SqlCompiler.EmitExpr(and));
 		}
@@ -111,7 +111,7 @@ namespace SqlDsl.Core.Tests
 		{
 			SqlExprBool left = true;
 			SqlExprBool right = false;
-			var or = left | right;
+			var or = left || right;
 
 			Assert.Equal("(TRUE OR FALSE)", SqlCompiler.EmitExpr(or));
 		}
