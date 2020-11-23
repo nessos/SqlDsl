@@ -10,7 +10,7 @@ namespace SqlDsl.Core.Tests
 		[InlineData(-32, "-32")]
 		[InlineData(32, "32")]
 		[InlineData(0, "0")]
-		public void SqlIntValueTest(int input, string expected)
+		public void SqlIntValueTests(int input, string expected)
 		{
 			var value = new SqlIntValue(input);
 			SqlExprInt implicitValue = input;
@@ -168,7 +168,7 @@ namespace SqlDsl.Core.Tests
 		[InlineData(-32, "-32")]
 		[InlineData(32, "32")]
 		[InlineData(0, "0")]
-		public void SqlIntPlusOptimizedTest(int value, string output)
+		public void SqlIntPlusOptimizedTests(int value, string output)
 		{
 			SqlExprInt valueSql = value;
 
@@ -183,7 +183,7 @@ namespace SqlDsl.Core.Tests
 		[InlineData(-32, "(-(-32))")]
 		[InlineData(32, "(-(32))")]
 		[InlineData(0, "(-(0))")]
-		public void SqlIntMinusTest(int value, string output)
+		public void SqlIntMinusTests(int value, string output)
 		{
 			SqlExprInt valueSql = value;
 
@@ -198,7 +198,7 @@ namespace SqlDsl.Core.Tests
 		[InlineData(-32, "32")]
 		[InlineData(32, "-32")]
 		[InlineData(0, "0")]
-		public void SqlIntMinusOptimizedTest(int value, string output)
+		public void SqlIntMinusOptimizedTests(int value, string output)
 		{
 			SqlExprInt valueSql = value;
 
@@ -213,7 +213,7 @@ namespace SqlDsl.Core.Tests
 		[InlineData(32, "(ABS(32))")]
 		[InlineData(-32, "(ABS(-32))")]
 		[InlineData(0, "(ABS(0))")]
-		public void SqlIntAbsTest(int testValue, string expected)
+		public void SqlIntAbsTests(int testValue, string expected)
 		{
 			var valueSql = new SqlIntValue(testValue);
 			var sqlAbs = new SqlIntAbs(valueSql);
@@ -227,7 +227,7 @@ namespace SqlDsl.Core.Tests
 		[InlineData(32, "32")]
 		[InlineData(-32, "32")]
 		[InlineData(0, "0")]
-		public void SqlIntAbsOptimizedTest(int value, string expected)
+		public void SqlIntAbsOptimizedTests(int value, string expected)
 		{
 			SqlExprInt valueSql = value;
 			var sqlAbs = new SqlIntAbs(valueSql);
