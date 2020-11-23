@@ -24,6 +24,23 @@ namespace SqlDsl.Core
 				SqlIntMinus(SqlIntValue(var value)) => new SqlIntValue(-value),
 				SqlIntAbs(SqlIntValue(var value)) => new SqlIntValue(value > 0 ? value : -value),
 
+				SqlIntGreaterThan(SqlIntValue(var left), SqlIntValue(var right)) => new SqlBoolValue(left > right),
+				SqlIntGreaterThan(var left, var right) => new SqlIntGreaterThan(OptimizeExpr(left) as SqlExprInt,
+					OptimizeExpr(right) as SqlExprInt),
+				SqlIntGreaterThanOrEqualTo(SqlIntValue(var left), SqlIntValue(var right)) => new SqlBoolValue(
+					left >= right),
+				SqlIntGreaterThanOrEqualTo(var left, var right) => new SqlIntGreaterThanOrEqualTo(
+					OptimizeExpr(left) as SqlExprInt,
+					OptimizeExpr(right) as SqlExprInt),
+				SqlIntLessThan(SqlIntValue(var left), SqlIntValue(var right)) => new SqlBoolValue(left < right),
+				SqlIntLessThan(var left, var right) => new SqlIntLessThan(OptimizeExpr(left) as SqlExprInt,
+					OptimizeExpr(right) as SqlExprInt),
+				SqlIntLessThanOrEqualTo(SqlIntValue(var left), SqlIntValue(var right)) => new SqlBoolValue(
+					left <= right),
+				SqlIntLessThanOrEqualTo(var left, var right) => new SqlIntLessThanOrEqualTo(
+					OptimizeExpr(left) as SqlExprInt,
+					OptimizeExpr(right) as SqlExprInt),
+
 				SqlIntAdd(var left, SqlIntValue(0)) => OptimizeExpr(left),
 				SqlIntAdd(SqlIntValue(0), var right) => OptimizeExpr(right),
 				SqlIntAdd(SqlIntValue(var left), SqlIntValue(var right)) => new SqlIntValue(left + right),
@@ -46,8 +63,8 @@ namespace SqlDsl.Core
 
 				SqlIntDiv(SqlIntValue(0), _) => new SqlIntValue(0),
 				SqlIntDiv(var left, SqlIntValue(1)) => OptimizeExpr(left),
-				SqlIntDiv(var left, SqlIntValue(0)) => new SqlIntDiv(OptimizeExpr(left) as SqlExprInt,
-					new SqlIntValue(0)),
+				SqlIntDiv(var left, SqlIntValue(0) right) => new SqlIntDiv(OptimizeExpr(left) as SqlExprInt,
+					right),
 				SqlIntDiv(SqlIntValue(var left), SqlIntValue(var right)) => new SqlIntValue(left / right),
 
 				_ => expr

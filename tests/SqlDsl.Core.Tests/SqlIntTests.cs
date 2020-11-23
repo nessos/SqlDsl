@@ -252,6 +252,20 @@ namespace SqlDsl.Core.Tests
 		}
 
 		[Theory]
+		[InlineData(3, 5, "FALSE")]
+		[InlineData(10, 6, "TRUE")]
+		[InlineData(10, 10, "FALSE")]
+		public void SqlIntGreaterThanOptimizedTests(int left, int right, string expected)
+		{
+			SqlExprInt leftSql = left;
+			SqlExprInt rightSql = right;
+
+			var sqlGreaterThan = leftSql > rightSql;
+
+			Assert.Equal(expected, sqlGreaterThan.CompileExpr());
+		}
+
+		[Theory]
 		[InlineData(3, 5, "(3 >= 5)")]
 		[InlineData(10, 6, "(10 >= 6)")]
 		public void SqlIntGreaterThanOrEqualToTests(int left, int right, string expected)
@@ -259,10 +273,24 @@ namespace SqlDsl.Core.Tests
 			SqlExprInt leftSql = left;
 			SqlExprInt rightSql = right;
 
-			var sqlGreaterThan = leftSql >= rightSql;
-			var sql = SqlCompiler.EmitExpr(sqlGreaterThan);
+			var sqlGreaterThanOrEqual = leftSql >= rightSql;
+			var sql = SqlCompiler.EmitExpr(sqlGreaterThanOrEqual);
 
 			Assert.Equal(expected, sql);
+		}
+
+		[Theory]
+		[InlineData(3, 5, "FALSE")]
+		[InlineData(10, 6, "TRUE")]
+		[InlineData(10, 10, "TRUE")]
+		public void SqlIntGreaterThanOrEqualToOptimizedTests(int left, int right, string expected)
+		{
+			SqlExprInt leftSql = left;
+			SqlExprInt rightSql = right;
+
+			var sqlGreaterThanOrEqual = leftSql >= rightSql;
+
+			Assert.Equal(expected, sqlGreaterThanOrEqual.CompileExpr());
 		}
 
 		[Theory]
@@ -273,10 +301,24 @@ namespace SqlDsl.Core.Tests
 			SqlExprInt leftSql = left;
 			SqlExprInt rightSql = right;
 
-			var sqlGreaterThan = leftSql < rightSql;
-			var sql = SqlCompiler.EmitExpr(sqlGreaterThan);
+			var sqlLessThan = leftSql < rightSql;
+			var sql = SqlCompiler.EmitExpr(sqlLessThan);
 
 			Assert.Equal(expected, sql);
+		}
+
+		[Theory]
+		[InlineData(3, 5, "TRUE")]
+		[InlineData(10, 6, "FALSE")]
+		[InlineData(10, 10, "FALSE")]
+		public void SqlIntLessThanOptimizedTests(int left, int right, string expected)
+		{
+			SqlExprInt leftSql = left;
+			SqlExprInt rightSql = right;
+
+			var sqlLessThan = leftSql < rightSql;
+
+			Assert.Equal(expected, sqlLessThan.CompileExpr());
 		}
 
 		[Theory]
@@ -287,10 +329,24 @@ namespace SqlDsl.Core.Tests
 			SqlExprInt leftSql = left;
 			SqlExprInt rightSql = right;
 
-			var sqlGreaterThan = leftSql <= rightSql;
-			var sql = SqlCompiler.EmitExpr(sqlGreaterThan);
+			var sqlLessThanOrEqual = leftSql <= rightSql;
+			var sql = SqlCompiler.EmitExpr(sqlLessThanOrEqual);
 
 			Assert.Equal(expected, sql);
+		}
+
+		[Theory]
+		[InlineData(3, 5, "TRUE")]
+		[InlineData(10, 6, "FALSE")]
+		[InlineData(10, 10, "TRUE")]
+		public void SqlIntLessThanOrEqualToOptimizedTests(int left, int right, string expected)
+		{
+			SqlExprInt leftSql = left;
+			SqlExprInt rightSql = right;
+
+			var sqlLessThanOrEqual = leftSql <= rightSql;
+
+			Assert.Equal(expected, sqlLessThanOrEqual.CompileExpr());
 		}
 	}
 }
