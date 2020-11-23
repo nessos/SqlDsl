@@ -7,16 +7,16 @@ namespace SqlDsl.Core.Tests
 	{
 		[Theory]
 		[InlineData(-32, "-32")]
-		[InlineData(32,"32")]
+		[InlineData(32, "32")]
 		[InlineData(0, "0")]
-		public void SqlIntValueTest(int input,string expected)
-        {
+		public void SqlIntValueTest(int input, string expected)
+		{
 			var value = new SqlIntValue(input);
 
-			var sql = value.CompileExpr();
+			var sql = SqlCompiler.EmitExpr(value);
 
-			Assert.Equal(expected,sql);
-        }
+			Assert.Equal(expected, sql);
+		}
 
 		[Fact]
 		public void SqlIntAddTest()
@@ -28,23 +28,23 @@ namespace SqlDsl.Core.Tests
 			var rightSql = new SqlIntValue(right);
 			var sqlAdd = new SqlIntAdd(leftSql, rightSql);
 
-			var sql = sqlAdd.CompileExpr();
+			var sql = SqlCompiler.EmitExpr(sqlAdd);
 
 			Assert.Equal($"({left} + {right})", sql);
 		}
 
 		[Theory]
-		[InlineData(1,2,"(1 - 2)")]
+		[InlineData(1, 2, "(1 - 2)")]
 		[InlineData(1, -2, "(1 - -2)")]
 		[InlineData(-1, 2, "(-1 - 2)")]
 		[InlineData(-1, -2, "(-1 - -2)")]
-		public void SqlIntSubTest(int left,int right,string expected)
-        {
+		public void SqlIntSubTest(int left, int right, string expected)
+		{
 			var leftSql = new SqlIntValue(left);
 			var rightSql = new SqlIntValue(right);
 			var sqlSub = new SqlIntSub(leftSql, rightSql);
 
-			var sql = sqlSub.CompileExpr();
+			var sql = SqlCompiler.EmitExpr(sqlSub);
 
 			Assert.Equal(expected, sql);
 		}
@@ -59,7 +59,7 @@ namespace SqlDsl.Core.Tests
 			var rightSql = new SqlIntValue(right);
 			var sqlMult = new SqlIntMult(leftSql, rightSql);
 
-			var sql = sqlMult.CompileExpr();
+			var sql = SqlCompiler.EmitExpr(sqlMult);
 
 			Assert.Equal($"({left} * {right})", sql);
 		}
@@ -74,34 +74,35 @@ namespace SqlDsl.Core.Tests
 			var sqlPlus = new SqlIntPlus(valueSql);
 
 			// Act
-			var sql = sqlPlus.CompileExpr();
+			var sql = SqlCompiler.EmitExpr(sqlPlus);
 
 			// Assert
 			Assert.Equal($"({value})", sql);
 		}
+
 		[Fact]
 		public void SqlIntMinusTest()
-    {
+		{
 			var value = -32;
 			var valueSql = new SqlIntValue(value);
 
 			var sqlMinus = new SqlIntMinus(valueSql);
 
-			var sql = sqlMinus.CompileExpr();
+			var sql = SqlCompiler.EmitExpr(sqlMinus);
 
 			Assert.Equal($"(-({value}))", sql);
-    }
-    
+		}
+
 		[Theory]
-		[InlineData(32,"(ABS(32))")]
+		[InlineData(32, "(ABS(32))")]
 		[InlineData(-32, "(ABS(-32))")]
 		[InlineData(0, "(ABS(0))")]
-		public void SqlIntAbsTest(int testValue,string expected)
+		public void SqlIntAbsTest(int testValue, string expected)
 		{
 			var valueSql = new SqlIntValue(testValue);
 			var sqlAbs = new SqlIntAbs(valueSql);
 
-			var sql = sqlAbs.CompileExpr();
+			var sql = SqlCompiler.EmitExpr(sqlAbs);
 
 			Assert.Equal(expected, sql);
 		}

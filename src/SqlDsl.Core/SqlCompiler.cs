@@ -23,7 +23,7 @@ namespace SqlDsl.Core
 				: MultiOptimizer(optExpr);
 		}
 
-		private static string EmitExpr(SqlExpr expr) =>
+		public static string EmitExpr(SqlExpr expr) =>
 			expr switch
 			{
 				// Values
