@@ -29,7 +29,7 @@ namespace SqlDsl.Core
 		public static bool operator true(SqlExprBool _) => false;
 	}
 
-	public record SqlExprInt : SqlExpr<SqlInt>
+	public abstract record SqlExprInt : SqlExpr<SqlInt>
 	{
 		public static implicit operator SqlExprInt(int x) => new SqlIntValue(x);
 		public static SqlExprInt operator +(SqlExprInt left, SqlExprInt right) => new SqlIntAdd(left, right);
