@@ -35,7 +35,7 @@ namespace SqlDsl.Core
 				SqlBoolAnd(var left, var right) => $"({EmitExpr(left)} AND {EmitExpr(right)})",
 				SqlBoolOr(var left, var right) => $"({EmitExpr(left)} OR {EmitExpr(right)})",
 
-        SqlStringValue(var value) => $"'{value}'",
+				SqlStringValue(var value) => $"'{value}'",
 				SqlStringToUpper(var value) => $"{EmitExpr(value).ToUpper()}",
 				SqlStringToLower(var value) => $"{EmitExpr(value).ToLower()}" ,
           
