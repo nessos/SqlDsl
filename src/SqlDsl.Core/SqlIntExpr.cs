@@ -6,5 +6,5 @@ namespace SqlDsl.Core
     public record SqlIntPlus(SqlExpr<SqlInt> Value) : SqlExprInt,SqlUnaryExpr<SqlInt>;
     public record SqlIntMinus(SqlExpr<SqlInt> Value) : SqlExprInt,SqlUnaryExpr<SqlInt>;
     public record SqlIntValue(int Value) : SqlExprInt;
-    public record SqlIntAbs(SqlExpr<SqlInt> Value);
+    public record SqlIntAbs(SqlExpr<SqlInt> Value) : SqlExprInt, SqlUnaryExpr<SqlInt>;
 }

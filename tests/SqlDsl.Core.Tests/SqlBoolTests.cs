@@ -10,7 +10,7 @@ namespace SqlDsl.Core.Tests
 		[Fact]
 		public void SqlBoolValue()
 		{
-			var sql = SqlTrue.CompileExpr();
+			var sql = SqlCompiler.EmitExpr(SqlTrue);
 			Assert.Equal("TRUE", sql);
 
 			sql = SqlFalse.CompileExpr();
@@ -21,7 +21,7 @@ namespace SqlDsl.Core.Tests
 		public void SqlBoolAnd()
 		{
 			var and = new SqlBoolAnd(SqlTrue, SqlFalse);
-			var sql = and.CompileExpr();
+			var sql = SqlCompiler.EmitExpr(and);
 
 			Assert.Equal("(TRUE AND FALSE)", sql);
 		}
@@ -29,8 +29,8 @@ namespace SqlDsl.Core.Tests
 		[Fact]
 		public void SqlBoolOr()
 		{
-			var and = new SqlBoolOr(SqlTrue, SqlFalse);
-			var sql = and.CompileExpr();
+			var or = new SqlBoolOr(SqlTrue, SqlFalse);
+			var sql = SqlCompiler.EmitExpr(or);
 
 			Assert.Equal("(TRUE OR FALSE)", sql);
 		}
@@ -39,7 +39,7 @@ namespace SqlDsl.Core.Tests
 		public void SqlNotTest()
 		{
 			var notSql = new SqlBoolNot(SqlFalse);
-			var sql = notSql.CompileExpr();
+			var sql = SqlCompiler.EmitExpr(notSql);
 
 			Assert.Equal("NOT (FALSE)", sql);
 		}

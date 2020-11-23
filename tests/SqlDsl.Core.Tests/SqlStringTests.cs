@@ -15,7 +15,7 @@ namespace SqlDsl.Core.Tests
 
 			var sqlStr = new SqlStringValue(str);
 			var sqlToLower = new SqlStringToLower(sqlStr);
-			var sql = sqlToLower.CompileExpr();
+			var sql = SqlCompiler.EmitExpr(sqlToLower);
 
 			Assert.Equal($"'{"testAbCd".ToLower()}'", sql);
 		}
@@ -25,7 +25,7 @@ namespace SqlDsl.Core.Tests
 		{
 			var sqlStr = new SqlStringValue("testAbCd");
 			var sqlToUpper = new SqlStringToUpper(sqlStr);
-			var sql = sqlToUpper.CompileExpr();
+			var sql = SqlCompiler.EmitExpr(sqlToUpper);
 
 			Assert.Equal($"'{"testAbCd".ToUpper()}'", sql);
 		}
