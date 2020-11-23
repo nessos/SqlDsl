@@ -1,23 +1,32 @@
 namespace SqlDsl.Core
 {
-    public interface SqlExpr { }
-    
-    public interface SqlExpr<TSqlType> : SqlExpr where TSqlType : SqlType { }
+	public interface SqlExpr
+	{
+	}
 
-    public interface SqlUnaryExpr<TSqlType> : SqlExpr<TSqlType> where TSqlType : SqlType
-    {
-	    SqlExpr<TSqlType> Value { get; }
-    }
+	public interface SqlExpr<TSqlType> : SqlExpr where TSqlType : SqlType
+	{
+	}
 
-    public interface SqlBinExpr<TSqlType> : SqlExpr<TSqlType> where TSqlType : SqlType
-    {
-        SqlExpr<TSqlType> Left { get; }
-        SqlExpr<TSqlType> Right { get; }
-    }
+	public interface SqlUnaryExpr<TSqlType> : SqlExpr<TSqlType> where TSqlType : SqlType
+	{
+		SqlExpr<TSqlType> Value { get; }
+	}
 
-    public record SqlExprInt : SqlExpr<SqlInt>
-    {
-        public static SqlExprInt operator +(SqlExprInt a, SqlExprInt b) => new SqlIntAdd(a, b);
-        public static implicit operator SqlExprInt(int x) => new SqlIntValue(x);
-    }
+	public interface SqlBinExpr<TSqlType> : SqlExpr<TSqlType> where TSqlType : SqlType
+	{
+		SqlExpr<TSqlType> Left { get; }
+		SqlExpr<TSqlType> Right { get; }
+	}
+
+	public record SqlExprBool : SqlExpr<SqlBool>
+	{
+		public static implicit operator SqlExprBool(bool value) => new SqlBoolValue(value);
+	}
+
+	public record SqlExprInt : SqlExpr<SqlInt>
+	{
+		public static SqlExprInt operator +(SqlExprInt a, SqlExprInt b) => new SqlIntAdd(a, b);
+		public static implicit operator SqlExprInt(int x) => new SqlIntValue(x);
+	}
 }
