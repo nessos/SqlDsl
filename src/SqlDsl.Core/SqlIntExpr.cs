@@ -20,11 +20,10 @@ namespace SqlDsl.Core
 	public record SqlIntGreaterThan(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprBool, SqlBinExpr<SqlInt>;
 
 	public record SqlIntLessThan(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprBool, SqlBinExpr<SqlInt>;
-
-
-
-	public record SqlIntGreaterThanOrEqualTo(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprInt,
+	
+	public record SqlIntGreaterThanOrEqualTo(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprBool,
 		SqlBinExpr<SqlInt>;
 
-	public record SqlIntLessThanOrEqualTo(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprInt, SqlBinExpr<SqlInt>;
+	public record SqlIntLessThanOrEqualTo
+		(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprBool, SqlBinExpr<SqlInt>;
 }
