@@ -4,46 +4,50 @@ namespace SqlDsl.Core.Tests
 {
 	public class SqlStringTests
 	{
-		public static SqlExpr<SqlString> SqlStr = new SqlStringValue("testAbCd");
-
-
-		[Fact]
-		public void SqlStringToLowerTest()
+		[Theory]
+		[InlineData("testing", "'testing'")]
+		[InlineData("a whole new world", "'a whole new world'")]
+		public void SqlStringValueTests(string value, string expected)
 		{
+			SqlExprString sqlValue = value;
 
-			var str = "testAbCd";
-
-			var sqlStr = new SqlStringValue(str);
-			var sqlToLower = new SqlStringToLower(sqlStr);
-			var sql = SqlCompiler.EmitExpr(sqlToLower);
-
-			Assert.Equal($"'{"testAbCd".ToLower()}'", sql);
-    }
-    
-		[Fact]
-		public void SqlStringConcatTest()
-		{
-			var left = "Hello ";
-			var right = "world!";
-
-			var sqlLeft = new SqlStringValue(left);
-			var sqlRight = new SqlStringValue(right);
-			var sqlConcat = new SqlStringConcat(sqlLeft, sqlRight);
-			var sql = sqlConcat.CompileExpr();
-
-			Assert.Equal($"('{left}' + '{right}')", sql);
+			Assert.Equal(expected, SqlCompiler.EmitExpr(sqlValue));
 		}
 
-		[Fact]
-		public void SqlStringToUpperTest()
+		[Theory]
+		[InlineData("testing", "LOWER('testing')")]
+		[InlineData("a whole new world", "LOWER('a whole new world')")]
+		public void SqlStringToLowerTest(string value, string expected)
 		{
-			var value = "TestAbCd";
+			SqlExprString sqlString = value;
 
-			var sqlStr = new SqlStringValue(value);
-			var sqlToUpper = new SqlStringToUpper(sqlStr);
-			var sql = sqlToUpper.CompileExpr();
+			SqlStringToLower sqlToLower = new(sqlString);
 
-			Assert.Equal($"UPPER('{value}')", sql);
+			Assert.Equal(expected, SqlCompiler.EmitExpr(sqlToLower));
+		}
+
+		[Theory]
+		[InlineData("testing", "UPPER('testing')")]
+		[InlineData("a whole new world", "UPPER('a whole new world')")]
+		public void SqlStringToUpperTest(string value, string expected)
+		{
+			SqlExprString sqlString = value;
+
+			SqlStringToUpper sqlToUpper = new(sqlString);
+
+			Assert.Equal(expected, SqlCompiler.EmitExpr(sqlToUpper));
+		}
+
+		[Theory]
+		[InlineData("hello", "world", "CONCAT('hello', 'world')")]
+		[InlineData("let's go","party", "CONCAT('let's go', 'party')")]
+		public void SqlStringConcatTest(string left, string right, string expected)
+		{
+			SqlExprString leftSql = left;
+			SqlExprString rightSql = right;
+			SqlStringConcat sqlConcat = new(leftSql, rightSql);
+
+			Assert.Equal(expected, SqlCompiler.EmitExpr(sqlConcat));
 		}
 	}
 }
