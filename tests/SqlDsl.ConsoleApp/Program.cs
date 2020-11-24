@@ -3,19 +3,25 @@ using SqlDsl.Core;
 
 namespace SqlDsl.ConsoleApp
 {
+    record Foo(string Name);
     
     class Program
     {
+
+
         static void Main(string[] args)
         {
 
-            Func<SqlExprInt, SqlExprInt> f = x => 1 + x + 1 + 1 + 1 + 1;
+            SqlExprInt leftSql = 1;
+            SqlExprInt rightSql = 2;
+
+            var sqlMult = leftSql / rightSql;
+
+            var customers = (Table: "Customer", (Id: new SqlIntColumn("Id"), 
+                                                 Age: new SqlIntColumn("Age")));
+            var query = customers.From();
             
-            var expr = f(1);
-
-
-
-            Console.WriteLine(SqlCompiler.CompileOptimizedExpr(expr));
+            Console.WriteLine(SqlCompiler.CompileOptimizedExpr(sqlMult));
 
         }
     }

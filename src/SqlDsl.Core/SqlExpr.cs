@@ -53,4 +53,7 @@ namespace SqlDsl.Core
 	{
 		public static implicit operator SqlExprString(string value) => new SqlStringValue(value);
 	}
+
+	public record SqlIntColumn(string Name) : SqlExprInt;
+	public record SqlIntProjection(string Alias, string Name) : SqlExprInt;
 }
