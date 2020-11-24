@@ -92,9 +92,9 @@ namespace SqlDsl.Core
 				SqlBoolOr(var left, var right) => $"({EmitExpr(left)} OR {EmitExpr(right)})",
 
 				// Expressions - String
-				SqlStringValue(var value) => $"'{value}'",
-				SqlStringToUpper(var value) => $"{EmitExpr(value).ToUpper()}",
+				SqlStringToUpper(var value) => $"UPPER({EmitExpr(value)})",
 				SqlStringToLower(var value) => $"{EmitExpr(value).ToLower()}",
+				SqlStringConcat(var left, var right) => $"({CompileExpr(left)} + {CompileExpr(right)})",
 
 				// Expressions - Numeric
 				SqlIntAdd(var left, var right) => $"({CompileExpr(left)} + {CompileExpr(right)})",
@@ -110,11 +110,6 @@ namespace SqlDsl.Core
 				SqlIntGreaterThanOrEqualTo(var left, var right) => $"({CompileExpr(left)} >= {CompileExpr(right)})",
 				SqlIntLessThan(var left, var right) => $"({CompileExpr(left)} < {CompileExpr(right)})",
 				SqlIntLessThanOrEqualTo(var left, var right) => $"({CompileExpr(left)} <= {CompileExpr(right)})",
-
-				// Expressions - String
-				SqlStringConcat(var left, var right) => $"{CompileExpr(left)} + {CompileExpr(right)}",
-				SqlStringToUpper(var value) => $"UPPER({CompileExpr(value)})",
-				SqlStringToLower(var value) => $"LOWER({CompileExpr(value)})",
 
 				_ => throw new Exception($"Not supported {expr}")
 			};

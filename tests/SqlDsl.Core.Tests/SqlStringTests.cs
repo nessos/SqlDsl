@@ -31,7 +31,7 @@ namespace SqlDsl.Core.Tests
 			var sqlConcat = new SqlStringConcat(sqlLeft, sqlRight);
 			var sql = sqlConcat.CompileExpr();
 
-			Assert.Equal(sql, $"'{left}' + '{right}'");
+			Assert.Equal($"('{left}' + '{right}')", sql);
 		}
 
 		[Fact]
@@ -44,18 +44,6 @@ namespace SqlDsl.Core.Tests
 			var sql = sqlToUpper.CompileExpr();
 
 			Assert.Equal($"UPPER('{value}')", sql);
-		}
-
-		[Fact]
-		public void SqlStringToLowerTest()
-		{
-			var value = "TestAbCd";
-
-			var sqlStr = new SqlStringValue(value);
-			var sqlToLower = new SqlStringToLower(sqlStr);
-			var sql = sqlToLower.CompileExpr();
-
-			Assert.Equal($"LOWER('{value}')", sql);
 		}
 	}
 }
