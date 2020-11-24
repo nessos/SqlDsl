@@ -7,6 +7,18 @@ namespace SqlDsl.Core
 		private static SqlExpr OptimizeExpr(SqlExpr expr) =>
 			expr switch
 			{
+				// String Optimizations
+				SqlStringToUpper(SqlStringValue(var value)) => new SqlStringValue(value.ToUpperInvariant()),
+				SqlStringToUpper(var value) => new SqlStringToUpper(OptimizeExpr(value) as SqlExprString),
+
+				SqlStringToLower(SqlStringValue(var value)) => new SqlStringValue(value.ToLowerInvariant()),
+				SqlStringToLower(var value) => new SqlStringToLower(OptimizeExpr(value) as SqlExprString),
+
+				SqlStringConcat(SqlStringValue(var left), SqlStringValue(var right)) => new SqlStringValue(
+					string.Join(string.Empty, left, right)),
+				SqlStringConcat(var left, var right) => new SqlStringConcat(OptimizeExpr(left) as SqlExprString,
+					OptimizeExpr(right) as SqlExprString),
+
 				// Bool Optimizations
 				SqlBoolAnd(SqlBoolValue(false), _) => new SqlBoolValue(false),
 				SqlBoolAnd(_, SqlBoolValue(false)) => new SqlBoolValue(false),
