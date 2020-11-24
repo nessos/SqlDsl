@@ -42,7 +42,15 @@ namespace SqlDsl.Core
 		public static SqlExprBool operator >(SqlExprInt left, SqlExprInt right) => new SqlIntGreaterThan(left, right);
 		public static SqlExprBool operator <(SqlExprInt left, SqlExprInt right) => new SqlIntLessThan(left, right);
 
-		public static SqlExprBool operator >=(SqlExprInt left, SqlExprInt right) => new SqlIntGreaterThanOrEqualTo(left, right);
-		public static SqlExprBool operator <=(SqlExprInt left, SqlExprInt right) => new SqlIntLessThanOrEqualTo(left, right);
+		public static SqlExprBool operator >=(SqlExprInt left, SqlExprInt right) =>
+			new SqlIntGreaterThanOrEqualTo(left, right);
+
+		public static SqlExprBool operator <=(SqlExprInt left, SqlExprInt right) =>
+			new SqlIntLessThanOrEqualTo(left, right);
+	}
+
+	public abstract record SqlExprString : SqlExpr<SqlString>
+	{
+		public static implicit operator SqlExprString(string value) => new SqlStringValue(value);
 	}
 }

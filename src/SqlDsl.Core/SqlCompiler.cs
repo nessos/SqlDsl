@@ -7,6 +7,18 @@ namespace SqlDsl.Core
 		private static SqlExpr OptimizeExpr(SqlExpr expr) =>
 			expr switch
 			{
+				// String Optimizations
+				SqlStringToUpper(SqlStringValue(var value)) => new SqlStringValue(value.ToUpperInvariant()),
+				SqlStringToUpper(var value) => new SqlStringToUpper(OptimizeExpr(value) as SqlExprString),
+
+				SqlStringToLower(SqlStringValue(var value)) => new SqlStringValue(value.ToLowerInvariant()),
+				SqlStringToLower(var value) => new SqlStringToLower(OptimizeExpr(value) as SqlExprString),
+
+				SqlStringConcat(SqlStringValue(var left), SqlStringValue(var right)) => new SqlStringValue(
+					string.Join(string.Empty, left, right)),
+				SqlStringConcat(var left, var right) => new SqlStringConcat(OptimizeExpr(left) as SqlExprString,
+					OptimizeExpr(right) as SqlExprString),
+
 				// Bool Optimizations
 				SqlBoolAnd(SqlBoolValue(false), _) => new SqlBoolValue(false),
 				SqlBoolAnd(_, SqlBoolValue(false)) => new SqlBoolValue(false),
@@ -92,29 +104,24 @@ namespace SqlDsl.Core
 				SqlBoolOr(var left, var right) => $"({EmitExpr(left)} OR {EmitExpr(right)})",
 
 				// Expressions - String
-				SqlStringValue(var value) => $"'{value}'",
-				SqlStringToUpper(var value) => $"{EmitExpr(value).ToUpper()}",
-				SqlStringToLower(var value) => $"{EmitExpr(value).ToLower()}",
+				SqlStringToUpper(var value) => $"UPPER({EmitExpr(value)})",
+				SqlStringToLower(var value) => $"LOWER({EmitExpr(value)})",
+				SqlStringConcat(var left, var right) => $"CONCAT({EmitExpr(left)}, {EmitExpr(right)})",
 
 				// Expressions - Numeric
-				SqlIntAdd(var left, var right) => $"({CompileExpr(left)} + {CompileExpr(right)})",
-				SqlIntSub(var left, var right) => $"({CompileExpr(left)} - {CompileExpr(right)})",
-				SqlIntMult(var left, var right) => $"({CompileExpr(left)} * {CompileExpr(right)})",
-				SqlIntDiv(var left, var right) => $"({CompileExpr(left)} / {CompileExpr(right)})",
+				SqlIntAdd(var left, var right) => $"({EmitExpr(left)} + {EmitExpr(right)})",
+				SqlIntSub(var left, var right) => $"({EmitExpr(left)} - {EmitExpr(right)})",
+				SqlIntMult(var left, var right) => $"({EmitExpr(left)} * {EmitExpr(right)})",
+				SqlIntDiv(var left, var right) => $"({EmitExpr(left)} / {EmitExpr(right)})",
 
-				SqlIntPlus(var value) => $"({CompileExpr(value)})",
-				SqlIntMinus(var value) => $"(-({CompileExpr(value)}))",
-				SqlIntAbs(var value) => $"(ABS({CompileExpr(value)}))",
+				SqlIntPlus(var value) => $"({EmitExpr(value)})",
+				SqlIntMinus(var value) => $"(-({EmitExpr(value)}))",
+				SqlIntAbs(var value) => $"(ABS({EmitExpr(value)}))",
 
-				SqlIntGreaterThan(var left, var right) => $"({CompileExpr(left)} > {CompileExpr(right)})",
-				SqlIntGreaterThanOrEqualTo(var left, var right) => $"({CompileExpr(left)} >= {CompileExpr(right)})",
-				SqlIntLessThan(var left, var right) => $"({CompileExpr(left)} < {CompileExpr(right)})",
-				SqlIntLessThanOrEqualTo(var left, var right) => $"({CompileExpr(left)} <= {CompileExpr(right)})",
-
-				// Expressions - String
-				SqlStringConcat(var left, var right) => $"{CompileExpr(left)} + {CompileExpr(right)}",
-				SqlStringToUpper(var value) => $"UPPER({CompileExpr(value)})",
-				SqlStringToLower(var value) => $"LOWER({CompileExpr(value)})",
+				SqlIntGreaterThan(var left, var right) => $"({EmitExpr(left)} > {EmitExpr(right)})",
+				SqlIntGreaterThanOrEqualTo(var left, var right) => $"({EmitExpr(left)} >= {EmitExpr(right)})",
+				SqlIntLessThan(var left, var right) => $"({EmitExpr(left)} < {EmitExpr(right)})",
+				SqlIntLessThanOrEqualTo(var left, var right) => $"({EmitExpr(left)} <= {EmitExpr(right)})",
 
 				_ => throw new Exception($"Not supported {expr}")
 			};
