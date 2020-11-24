@@ -11,7 +11,7 @@ namespace SqlDsl.Core.Tests
 		{
 			SqlExprString sqlValue = value;
 
-			Assert.Equal(expected, SqlCompiler.EmitExpr(sqlValue));
+			Assert.Equal(expected, sqlValue.CompileExpr());
 		}
 
 		[Theory]
@@ -23,7 +23,7 @@ namespace SqlDsl.Core.Tests
 
 			SqlStringToLower sqlToLower = new(sqlString);
 
-			Assert.Equal(expected, SqlCompiler.EmitExpr(sqlToLower));
+			Assert.Equal(expected, sqlToLower.CompileExpr());
 		}
 
 		[Theory]
@@ -35,7 +35,7 @@ namespace SqlDsl.Core.Tests
 
 			SqlStringToLower sqlToLower = new(sqlString);
 
-			Assert.Equal(expected, sqlToLower.CompileExpr());
+			Assert.Equal(expected, sqlToLower.CompileOptimizedExpr());
 		}
 
 		[Theory]
@@ -47,7 +47,7 @@ namespace SqlDsl.Core.Tests
 
 			SqlStringToUpper sqlToUpper = new(sqlString);
 
-			Assert.Equal(expected, SqlCompiler.EmitExpr(sqlToUpper));
+			Assert.Equal(expected, sqlToUpper.CompileExpr());
 		}
 
 		[Theory]
@@ -59,7 +59,7 @@ namespace SqlDsl.Core.Tests
 
 			SqlStringToUpper sqlToUpper = new(sqlString);
 
-			Assert.Equal(expected, sqlToUpper.CompileExpr());
+			Assert.Equal(expected, sqlToUpper.CompileOptimizedExpr());
 		}
 
 		[Theory]
@@ -71,7 +71,7 @@ namespace SqlDsl.Core.Tests
 			SqlExprString rightSql = right;
 			SqlStringConcat sqlConcat = new(leftSql, rightSql);
 
-			Assert.Equal(expected, SqlCompiler.EmitExpr(sqlConcat));
+			Assert.Equal(expected, sqlConcat.CompileExpr());
 		}
 
 		[Theory]
@@ -83,7 +83,7 @@ namespace SqlDsl.Core.Tests
 			SqlExprString rightSql = right;
 			SqlStringConcat sqlConcat = new(leftSql, rightSql);
 
-			Assert.Equal(expected, sqlConcat.CompileExpr());
+			Assert.Equal(expected, sqlConcat.CompileOptimizedExpr());
 		}
 	}
 }

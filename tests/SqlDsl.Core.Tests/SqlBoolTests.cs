@@ -113,7 +113,7 @@ namespace SqlDsl.Core.Tests
 			SqlExprBool right = false;
 			var and = left && right;
 
-			Assert.Equal("(TRUE AND FALSE)", SqlCompiler.EmitExpr(and));
+			Assert.Equal("(TRUE AND FALSE)", and.CompileExpr());
 		}
 
 		[Fact]
@@ -123,7 +123,7 @@ namespace SqlDsl.Core.Tests
 			SqlExprBool right = false;
 			var or = left || right;
 
-			Assert.Equal("(TRUE OR FALSE)", SqlCompiler.EmitExpr(or));
+			Assert.Equal("(TRUE OR FALSE)", or.CompileExpr());
 		}
 
 		[Fact]
@@ -132,10 +132,10 @@ namespace SqlDsl.Core.Tests
 			SqlExprBool left = true;
 			SqlExprBool right = false;
 
-			var notLeft = SqlCompiler.EmitExpr(!left);
+			var notLeft = (!left).CompileExpr();
 			
 			Assert.Equal("NOT (TRUE)", notLeft);
-			Assert.Equal("NOT (FALSE)", SqlCompiler.EmitExpr(!right));
+			Assert.Equal("NOT (FALSE)", (!right).CompileExpr());
 		}
 	}
 }
