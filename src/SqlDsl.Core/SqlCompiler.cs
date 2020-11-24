@@ -84,6 +84,7 @@ namespace SqlDsl.Core
 				// Values
 				SqlIntValue(var value) => value.ToString(),
 				SqlBoolValue(var value) => value.ToString().ToUpper(),
+				SqlStringValue(var value) => $"'{value}'",
 
 				// Expressions - Boolean
 				SqlBoolNot(var value) => $"NOT ({EmitExpr(value)})",
@@ -109,6 +110,11 @@ namespace SqlDsl.Core
 				SqlIntGreaterThanOrEqualTo(var left, var right) => $"({CompileExpr(left)} >= {CompileExpr(right)})",
 				SqlIntLessThan(var left, var right) => $"({CompileExpr(left)} < {CompileExpr(right)})",
 				SqlIntLessThanOrEqualTo(var left, var right) => $"({CompileExpr(left)} <= {CompileExpr(right)})",
+
+				// Expressions - String
+				SqlStringConcat(var left, var right) => $"{CompileExpr(left)} + {CompileExpr(right)}",
+				SqlStringToUpper(var value) => $"UPPER({CompileExpr(value)})",
+				SqlStringToLower(var value) => $"LOWER({CompileExpr(value)})",
 
 				_ => throw new Exception($"Not supported {expr}")
 			};
