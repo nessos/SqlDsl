@@ -93,23 +93,23 @@ namespace SqlDsl.Core
 
 				// Expressions - String
 				SqlStringToUpper(var value) => $"UPPER({EmitExpr(value)})",
-				SqlStringToLower(var value) => $"{EmitExpr(value).ToLower()}",
-				SqlStringConcat(var left, var right) => $"({CompileExpr(left)} + {CompileExpr(right)})",
+				SqlStringToLower(var value) => $"LOWER({EmitExpr(value)})",
+				SqlStringConcat(var left, var right) => $"CONCAT({EmitExpr(left)}, {EmitExpr(right)})",
 
 				// Expressions - Numeric
-				SqlIntAdd(var left, var right) => $"({CompileExpr(left)} + {CompileExpr(right)})",
-				SqlIntSub(var left, var right) => $"({CompileExpr(left)} - {CompileExpr(right)})",
-				SqlIntMult(var left, var right) => $"({CompileExpr(left)} * {CompileExpr(right)})",
-				SqlIntDiv(var left, var right) => $"({CompileExpr(left)} / {CompileExpr(right)})",
+				SqlIntAdd(var left, var right) => $"({EmitExpr(left)} + {EmitExpr(right)})",
+				SqlIntSub(var left, var right) => $"({EmitExpr(left)} - {EmitExpr(right)})",
+				SqlIntMult(var left, var right) => $"({EmitExpr(left)} * {EmitExpr(right)})",
+				SqlIntDiv(var left, var right) => $"({EmitExpr(left)} / {EmitExpr(right)})",
 
-				SqlIntPlus(var value) => $"({CompileExpr(value)})",
-				SqlIntMinus(var value) => $"(-({CompileExpr(value)}))",
-				SqlIntAbs(var value) => $"(ABS({CompileExpr(value)}))",
+				SqlIntPlus(var value) => $"({EmitExpr(value)})",
+				SqlIntMinus(var value) => $"(-({EmitExpr(value)}))",
+				SqlIntAbs(var value) => $"(ABS({EmitExpr(value)}))",
 
-				SqlIntGreaterThan(var left, var right) => $"({CompileExpr(left)} > {CompileExpr(right)})",
-				SqlIntGreaterThanOrEqualTo(var left, var right) => $"({CompileExpr(left)} >= {CompileExpr(right)})",
-				SqlIntLessThan(var left, var right) => $"({CompileExpr(left)} < {CompileExpr(right)})",
-				SqlIntLessThanOrEqualTo(var left, var right) => $"({CompileExpr(left)} <= {CompileExpr(right)})",
+				SqlIntGreaterThan(var left, var right) => $"({EmitExpr(left)} > {EmitExpr(right)})",
+				SqlIntGreaterThanOrEqualTo(var left, var right) => $"({EmitExpr(left)} >= {EmitExpr(right)})",
+				SqlIntLessThan(var left, var right) => $"({EmitExpr(left)} < {EmitExpr(right)})",
+				SqlIntLessThanOrEqualTo(var left, var right) => $"({EmitExpr(left)} <= {EmitExpr(right)})",
 
 				_ => throw new Exception($"Not supported {expr}")
 			};
