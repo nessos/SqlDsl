@@ -1,52 +1,28 @@
 namespace SqlDsl.Core
 {
- 
+	public record SqlIntValue(int Value) : SqlExprInt;
 
-    public class SqlIntAdd : SqlBinExpr<SqlInt>
-    {
-        public SqlExpr<SqlInt> Left { get; }
-        public SqlExpr<SqlInt> Right { get; }
-        public SqlIntAdd(SqlExpr<SqlInt> left, SqlExpr<SqlInt> right)
-        {
-            this.Left = left;
-            this.Right = right;
-        }
-        public void Deconstruct(out SqlExpr<SqlInt> left, out SqlExpr<SqlInt> right)
-        {
-            left = this.Left;
-            right = this.Right;
-        }
-    }
+	public record SqlIntPlus(SqlExpr<SqlInt> Value) : SqlExprInt, SqlUnaryExpr<SqlInt>;
 
-    public class SqlIntMult : SqlBinExpr<SqlInt>
-    {
-        public SqlExpr<SqlInt> Left { get; }
-        public SqlExpr<SqlInt> Right { get; }
-        public SqlIntMult(SqlExpr<SqlInt> left, SqlExpr<SqlInt> right)
-        {
-            this.Left = left;
-            this.Right = right;
-        }
-        public void Deconstruct(out SqlExpr<SqlInt> left, out SqlExpr<SqlInt> right)
-        {
-            left = this.Left;
-            right = this.Right;
-        }
-    }
+	public record SqlIntMinus(SqlExpr<SqlInt> Value) : SqlExprInt, SqlUnaryExpr<SqlInt>;
 
-    public class SqlIntValue : SqlExpr<SqlInt>
-    {
-        public int Value { get; private set; }
-        public SqlIntValue(int v)
-        {
-            this.Value = v;
-        }
-        public void Deconstruct(out int value)
-        {
-            value = this.Value;
-        }
-    }
+	public record SqlIntAbs(SqlExpr<SqlInt> Value) : SqlExprInt, SqlUnaryExpr<SqlInt>;
 
- 
+	public record SqlIntAdd(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprInt, SqlBinExpr<SqlInt>;
 
+	public record SqlIntSub(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprInt, SqlBinExpr<SqlInt>;
+
+	public record SqlIntMult(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprInt, SqlBinExpr<SqlInt>;
+
+	public record SqlIntDiv(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprInt, SqlBinExpr<SqlInt>;
+	
+	public record SqlIntGreaterThan(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprBool, SqlBinExpr<SqlInt>;
+
+	public record SqlIntLessThan(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprBool, SqlBinExpr<SqlInt>;
+	
+	public record SqlIntGreaterThanOrEqualTo(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprBool,
+		SqlBinExpr<SqlInt>;
+
+	public record SqlIntLessThanOrEqualTo
+		(SqlExpr<SqlInt> Left, SqlExpr<SqlInt> Right) : SqlExprBool, SqlBinExpr<SqlInt>;
 }
