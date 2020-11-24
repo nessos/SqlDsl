@@ -82,7 +82,7 @@ namespace SqlDsl.Core
 				_ => expr
 			};
 
-		public static SqlExpr MultiOptimizer(SqlExpr expr)
+		private static SqlExpr MultiOptimizer(SqlExpr expr)
 		{
 			var optExpr = OptimizeExpr(expr);
 			return expr == optExpr
@@ -126,6 +126,8 @@ namespace SqlDsl.Core
 				_ => throw new Exception($"Not supported {expr}")
 			};
 
-		public static string CompileExpr(this SqlExpr expr) => EmitExpr(MultiOptimizer(expr));
+		public static string CompileOptimizedExpr(this SqlExpr expr) => EmitExpr(MultiOptimizer(expr));
+
+		public static string CompileExpr(this SqlExpr expr) => EmitExpr(expr);
 	}
 }
