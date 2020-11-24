@@ -15,7 +15,7 @@ namespace SqlDsl.Core.Tests
 			var value = new SqlIntValue(input);
 			SqlExprInt implicitValue = input;
 
-			var sql = SqlCompiler.EmitExpr(value);
+			var sql = value.CompileExpr();
 
 			Assert.Equal(expected, sql);
 			Assert.Equal(value, implicitValue);
@@ -32,7 +32,7 @@ namespace SqlDsl.Core.Tests
 			SqlExprInt rightSql = right;
 
 			var add = leftSql + rightSql;
-			var sql = SqlCompiler.EmitExpr(add);
+			var sql = add.CompileExpr();
 
 			Assert.Equal(expected, sql);
 		}
@@ -49,7 +49,7 @@ namespace SqlDsl.Core.Tests
 
 			var add = leftSql + rightSql;
 
-			Assert.Equal(expected, add.CompileExpr());
+			Assert.Equal(expected, add.CompileOptimizedExpr());
 		}
 
 		[Theory]
@@ -63,7 +63,7 @@ namespace SqlDsl.Core.Tests
 			SqlExprInt rightSql = right;
 
 			var sqlSub = leftSql - rightSql;
-			var sql = SqlCompiler.EmitExpr(sqlSub);
+			var sql = sqlSub.CompileExpr();
 
 			Assert.Equal(expected, sql);
 		}
@@ -80,7 +80,7 @@ namespace SqlDsl.Core.Tests
 
 			var sqlSub = leftSql - rightSql;
 
-			Assert.Equal(expected, sqlSub.CompileExpr());
+			Assert.Equal(expected, sqlSub.CompileOptimizedExpr());
 		}
 
 		[Theory]
@@ -95,7 +95,7 @@ namespace SqlDsl.Core.Tests
 			SqlExprInt rightSql = right;
 
 			var sqlMult = leftSql * rightSql;
-			var sql = SqlCompiler.EmitExpr(sqlMult);
+			var sql = sqlMult.CompileExpr();
 
 			Assert.Equal(expected, sql);
 		}
@@ -113,7 +113,7 @@ namespace SqlDsl.Core.Tests
 
 			var sqlMult = leftSql * rightSql;
 
-			Assert.Equal(expected, sqlMult.CompileExpr());
+			Assert.Equal(expected, sqlMult.CompileOptimizedExpr());
 		}
 
 		[Theory]
@@ -128,7 +128,7 @@ namespace SqlDsl.Core.Tests
 			SqlExprInt rightSql = right;
 
 			var sqlMult = leftSql / rightSql;
-			var sql = SqlCompiler.EmitExpr(sqlMult);
+			var sql = sqlMult.CompileExpr();
 
 			Assert.Equal(expected, sql);
 		}
@@ -146,7 +146,7 @@ namespace SqlDsl.Core.Tests
 
 			var sqlMult = leftSql / rightSql;
 
-			Assert.Equal(expected, sqlMult.CompileExpr());
+			Assert.Equal(expected, sqlMult.CompileOptimizedExpr());
 		}
 
 		[Theory]
@@ -159,7 +159,7 @@ namespace SqlDsl.Core.Tests
 
 			var sqlPlus = new SqlIntPlus(valueSql);
 
-			var sql = SqlCompiler.EmitExpr(sqlPlus);
+			var sql = sqlPlus.CompileExpr();
 
 			Assert.Equal(output, sql);
 		}
@@ -174,7 +174,7 @@ namespace SqlDsl.Core.Tests
 
 			var sqlPlus = new SqlIntPlus(valueSql);
 
-			var sql = sqlPlus.CompileExpr();
+			var sql = sqlPlus.CompileOptimizedExpr();
 
 			Assert.Equal(output, sql);
 		}
@@ -189,7 +189,7 @@ namespace SqlDsl.Core.Tests
 
 			var sqlMinus = new SqlIntMinus(valueSql);
 
-			var sql = SqlCompiler.EmitExpr(sqlMinus);
+			var sql = sqlMinus.CompileExpr();
 
 			Assert.Equal(output, sql);
 		}
@@ -204,7 +204,7 @@ namespace SqlDsl.Core.Tests
 
 			var sqlMinus = new SqlIntMinus(valueSql);
 
-			var sql = sqlMinus.CompileExpr();
+			var sql = sqlMinus.CompileOptimizedExpr();
 
 			Assert.Equal(output, sql);
 		}
@@ -218,7 +218,7 @@ namespace SqlDsl.Core.Tests
 			var valueSql = new SqlIntValue(testValue);
 			var sqlAbs = new SqlIntAbs(valueSql);
 
-			var sql = SqlCompiler.EmitExpr(sqlAbs);
+			var sql = sqlAbs.CompileExpr();
 
 			Assert.Equal(expected, sql);
 		}
@@ -232,7 +232,7 @@ namespace SqlDsl.Core.Tests
 			SqlExprInt valueSql = value;
 			var sqlAbs = new SqlIntAbs(valueSql);
 
-			var sql = sqlAbs.CompileExpr();
+			var sql = sqlAbs.CompileOptimizedExpr();
 
 			Assert.Equal(expected, sql);
 		}
@@ -246,7 +246,7 @@ namespace SqlDsl.Core.Tests
 			SqlExprInt rightSql = right;
 
 			var sqlGreaterThan = leftSql > rightSql;
-			var sql = SqlCompiler.EmitExpr(sqlGreaterThan);
+			var sql = sqlGreaterThan.CompileExpr();
 
 			Assert.Equal(expected, sql);
 		}
@@ -262,7 +262,7 @@ namespace SqlDsl.Core.Tests
 
 			var sqlGreaterThan = leftSql > rightSql;
 
-			Assert.Equal(expected, sqlGreaterThan.CompileExpr());
+			Assert.Equal(expected, sqlGreaterThan.CompileOptimizedExpr());
 		}
 
 		[Theory]
@@ -274,7 +274,7 @@ namespace SqlDsl.Core.Tests
 			SqlExprInt rightSql = right;
 
 			var sqlGreaterThanOrEqual = leftSql >= rightSql;
-			var sql = SqlCompiler.EmitExpr(sqlGreaterThanOrEqual);
+			var sql = sqlGreaterThanOrEqual.CompileExpr();
 
 			Assert.Equal(expected, sql);
 		}
@@ -290,7 +290,7 @@ namespace SqlDsl.Core.Tests
 
 			var sqlGreaterThanOrEqual = leftSql >= rightSql;
 
-			Assert.Equal(expected, sqlGreaterThanOrEqual.CompileExpr());
+			Assert.Equal(expected, sqlGreaterThanOrEqual.CompileOptimizedExpr());
 		}
 
 		[Theory]
@@ -302,7 +302,7 @@ namespace SqlDsl.Core.Tests
 			SqlExprInt rightSql = right;
 
 			var sqlLessThan = leftSql < rightSql;
-			var sql = SqlCompiler.EmitExpr(sqlLessThan);
+			var sql = sqlLessThan.CompileExpr();
 
 			Assert.Equal(expected, sql);
 		}
@@ -318,7 +318,7 @@ namespace SqlDsl.Core.Tests
 
 			var sqlLessThan = leftSql < rightSql;
 
-			Assert.Equal(expected, sqlLessThan.CompileExpr());
+			Assert.Equal(expected, sqlLessThan.CompileOptimizedExpr());
 		}
 
 		[Theory]
@@ -330,7 +330,7 @@ namespace SqlDsl.Core.Tests
 			SqlExprInt rightSql = right;
 
 			var sqlLessThanOrEqual = leftSql <= rightSql;
-			var sql = SqlCompiler.EmitExpr(sqlLessThanOrEqual);
+			var sql = sqlLessThanOrEqual.CompileExpr();
 
 			Assert.Equal(expected, sql);
 		}
@@ -346,7 +346,7 @@ namespace SqlDsl.Core.Tests
 
 			var sqlLessThanOrEqual = leftSql <= rightSql;
 
-			Assert.Equal(expected, sqlLessThanOrEqual.CompileExpr());
+			Assert.Equal(expected, sqlLessThanOrEqual.CompileOptimizedExpr());
 		}
 	}
 }

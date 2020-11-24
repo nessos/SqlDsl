@@ -1,99 +1,109 @@
+using System.Runtime.InteropServices.ComTypes;
 using Xunit;
 
 namespace SqlDsl.Core.Tests
 {
 	public class SqlBoolTests
 	{
-		public static SqlExpr<SqlBool> SqlTrue = new SqlBoolValue(true);
-		public static SqlExpr<SqlBool> SqlFalse = new SqlBoolValue(false);
+		private const string SqlTrue = "TRUE";
 
-		[Fact]
-		public void SqlBoolValue()
+		private const string SqlFalse = "FALSE";
+
+		[Theory]
+		[InlineData(true, SqlTrue)]
+		[InlineData(false, SqlFalse)]
+		public void SqlBoolValsImplicitTests(bool input, string expected)
 		{
-			var sql = SqlCompiler.EmitExpr(SqlTrue);
-			Assert.Equal("TRUE", sql);
-
-			sql = SqlFalse.CompileExpr();
-			Assert.Equal("FALSE", sql);
+			SqlExprBool sqlValue = input;
+			
+			Assert.Equal(expected, sqlValue.CompileExpr());
 		}
 
-		[Fact]
-		public void SqlBoolAndTest()
+		[Theory]
+		[InlineData(true, SqlTrue)]
+		[InlineData(false, SqlFalse)]
+		public void SqlBoolValue(bool input, string expected)
 		{
-			var and = new SqlBoolAnd(SqlTrue, SqlFalse);
-			var sql = SqlCompiler.EmitExpr(and);
-
-			Assert.Equal("(TRUE AND FALSE)", sql);
-
-			and = new SqlBoolAnd(SqlFalse, SqlTrue);
-			sql = SqlCompiler.EmitExpr(and);
-			Assert.Equal("(FALSE AND TRUE)", sql);
+			SqlExprBool sql = input;
+			Assert.Equal(expected, sql.CompileExpr());
 		}
 
-		[Fact]
-		public void SqlBoolAndOptimizedTest()
+		[Theory]
+		[InlineData(false, false, "(FALSE AND FALSE)")]
+		[InlineData(false, true, "(FALSE AND TRUE)")]
+		[InlineData(true, false, "(TRUE AND FALSE)")]
+		[InlineData(true, true, "(TRUE AND TRUE)")]
+		public void SqlBoolAndTest(bool left, bool right, string expected)
 		{
-			SqlBoolAnd trueAndFalse = new(SqlTrue, SqlFalse);
-			SqlBoolAnd falseAndTrue = new(SqlFalse, SqlTrue);
-			SqlBoolAnd falseAndFalse = new(SqlFalse, SqlFalse);
-			SqlBoolAnd trueAndTrue = new(SqlTrue, SqlTrue);
+			SqlExprBool sqlLeft = left;
+			SqlExprBool sqlRight = right;
+			SqlBoolAnd sqlAnd = new(sqlLeft, sqlRight);
 
-			Assert.Equal("FALSE",trueAndFalse.CompileExpr());
-			Assert.Equal("FALSE", falseAndTrue.CompileExpr());
-			Assert.Equal("FALSE", falseAndFalse.CompileExpr());
-			Assert.Equal("TRUE", trueAndTrue.CompileExpr());
+			Assert.Equal(expected, sqlAnd.CompileExpr());
 		}
 
-		[Fact]
-		public void SqlBoolOrTest()
+		[Theory]
+		[InlineData(false, false, SqlFalse)]
+		[InlineData(false, true, SqlFalse)]
+		[InlineData(true, false, SqlFalse)]
+		[InlineData(true, true, SqlTrue)]
+		public void SqlBoolAndOptimizedTest(bool left, bool right, string expected)
 		{
-			var or = new SqlBoolOr(SqlTrue, SqlFalse);
-			var sql = SqlCompiler.EmitExpr(or);
+			SqlExprBool sqlLeft = left;
+			SqlExprBool sqlRight = right;
+			SqlBoolAnd sqlAnd = new(sqlLeft, sqlRight);
 
-			Assert.Equal("(TRUE OR FALSE)", sql);
+			Assert.Equal(expected, sqlAnd.CompileOptimizedExpr());
 		}
 
-		[Fact]
-		public void SqlBoolOrOptimizedTest()
+		[Theory]
+		[InlineData(false, false, "(FALSE OR FALSE)")]
+		[InlineData(false, true, "(FALSE OR TRUE)")]
+		[InlineData(true, false, "(TRUE OR FALSE)")]
+		[InlineData(true, true, "(TRUE OR TRUE)")]
+		public void SqlBoolOrTest(bool left, bool right, string expected)
 		{
-			SqlBoolOr trueOrFalse = new(SqlTrue, SqlFalse);
-			SqlBoolOr falseOrTrue = new(SqlFalse, SqlTrue);
-			SqlBoolOr falseOrFalse = new(SqlFalse, SqlFalse);
-			SqlBoolOr trueOrTrue = new(SqlTrue, SqlTrue);
+			SqlExprBool sqlLeft = left;
+			SqlExprBool sqlRight = right;
+			SqlBoolOr sqlOr = new(sqlLeft, sqlRight);
 
-			Assert.Equal("TRUE", trueOrTrue.CompileExpr());
-			Assert.Equal("TRUE", falseOrTrue.CompileExpr());
-			Assert.Equal("TRUE", trueOrFalse.CompileExpr());
-			Assert.Equal("FALSE", falseOrFalse.CompileExpr());
+			Assert.Equal(expected, sqlOr.CompileExpr());
 		}
 
-		[Fact]
-		public void SqlNotTest()
+		[Theory]
+		[InlineData(false, false, SqlFalse)]
+		[InlineData(true, false, SqlTrue)]
+		[InlineData(false, true, SqlTrue)]
+		[InlineData(true, true, SqlTrue)]
+		public void SqlBoolOrOptimizedTest(bool left, bool right, string expected)
 		{
-			var notSql = new SqlBoolNot(SqlFalse);
-			var sql = SqlCompiler.EmitExpr(notSql);
+			SqlExprBool sqlLeft = left;
+			SqlExprBool sqlRight = right;
+			SqlBoolOr sqlOr = new(sqlLeft, sqlRight);
 
-			Assert.Equal("NOT (FALSE)", sql);
+			Assert.Equal(expected, sqlOr.CompileOptimizedExpr());
 		}
 
-		[Fact]
-		public void SqlNotOptimizedTest()
+		[Theory]
+		[InlineData(true, SqlTrue)]
+		[InlineData(false, SqlFalse)]
+		public void SqlNotTest(bool input, string expected)
 		{
-			SqlBoolNot notTrue = new(SqlTrue);
-			SqlBoolNot notFalse = new(SqlFalse);
+			SqlExprBool value = input;
+			var not = !value;
 
-			Assert.Equal("TRUE", notFalse.CompileExpr());
-			Assert.Equal("FALSE", notTrue.CompileExpr());
+			Assert.Equal($"NOT ({expected})", not.CompileExpr());
 		}
 
-		[Fact]
-		public void SqlBoolValsImplicitTests()
+		[Theory]
+		[InlineData(true, SqlFalse)]
+		[InlineData(false, SqlTrue)]
+		public void SqlNotOptimizedTest(bool input, string expected)
 		{
-			SqlExprBool sqlTrue = true;
-			SqlExprBool sqlFalse = false;
+			SqlExprBool value = input;
+			var not = !value;
 
-			Assert.Equal("TRUE", sqlTrue.CompileExpr());
-			Assert.Equal("FALSE", sqlFalse.CompileExpr());
+			Assert.Equal(expected, not.CompileOptimizedExpr());
 		}
 
 		[Fact]
@@ -103,7 +113,7 @@ namespace SqlDsl.Core.Tests
 			SqlExprBool right = false;
 			var and = left && right;
 
-			Assert.Equal("(TRUE AND FALSE)", SqlCompiler.EmitExpr(and));
+			Assert.Equal("(TRUE AND FALSE)", and.CompileExpr());
 		}
 
 		[Fact]
@@ -113,7 +123,7 @@ namespace SqlDsl.Core.Tests
 			SqlExprBool right = false;
 			var or = left || right;
 
-			Assert.Equal("(TRUE OR FALSE)", SqlCompiler.EmitExpr(or));
+			Assert.Equal("(TRUE OR FALSE)", or.CompileExpr());
 		}
 
 		[Fact]
@@ -122,11 +132,10 @@ namespace SqlDsl.Core.Tests
 			SqlExprBool left = true;
 			SqlExprBool right = false;
 
-			var notLeft = SqlCompiler.EmitExpr(!left);
-			var notRight = !right;
-
+			var notLeft = (!left).CompileExpr();
+			
 			Assert.Equal("NOT (TRUE)", notLeft);
-			Assert.Equal("NOT (FALSE)", SqlCompiler.EmitExpr(!right));
+			Assert.Equal("NOT (FALSE)", (!right).CompileExpr());
 		}
 	}
 }

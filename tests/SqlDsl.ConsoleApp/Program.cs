@@ -15,7 +15,7 @@ namespace SqlDsl.ConsoleApp
 
 
 
-            Console.WriteLine(SqlCompiler.CompileExpr(expr));
+            Console.WriteLine(SqlCompiler.CompileOptimizedExpr(expr));
 
         }
     }
