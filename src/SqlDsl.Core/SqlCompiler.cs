@@ -85,7 +85,7 @@ namespace SqlDsl.Core
 		private static SqlExpr MultiOptimizer(SqlExpr expr)
 		{
 			var optExpr = OptimizeExpr(expr);
-			return expr == optExpr
+			return expr.Equals(optExpr)
 				? optExpr
 				: MultiOptimizer(optExpr);
 		}

@@ -138,7 +138,7 @@ namespace SqlDsl.Core.Tests
 		[InlineData(0, 3, "0")]
 		[InlineData(10, 2, "5")]
 		[InlineData(-8, 1, "-8")]
-		//[InlineData(2, 0, "(2 / 0)")]
+		[InlineData(2, 0, "(2 / 0)")]
 		public void SqlIntDivOptimizedTests(int left, int right, string expected)
 		{
 			SqlExprInt leftSql = left;
