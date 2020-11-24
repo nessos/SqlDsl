@@ -1,3 +1,5 @@
+using Microsoft.VisualBasic.CompilerServices;
+
 namespace SqlDsl.Core
 {
 	public interface SqlExpr
@@ -29,9 +31,18 @@ namespace SqlDsl.Core
 		public static bool operator true(SqlExprBool _) => false;
 	}
 
-	public record SqlExprInt : SqlExpr<SqlInt>
+	public abstract record SqlExprInt : SqlExpr<SqlInt>
 	{
-		public static SqlExprInt operator +(SqlExprInt a, SqlExprInt b) => new SqlIntAdd(a, b);
 		public static implicit operator SqlExprInt(int x) => new SqlIntValue(x);
+		public static SqlExprInt operator +(SqlExprInt left, SqlExprInt right) => new SqlIntAdd(left, right);
+		public static SqlExprInt operator -(SqlExprInt left, SqlExprInt right) => new SqlIntSub(left, right);
+		public static SqlExprInt operator *(SqlExprInt left, SqlExprInt right) => new SqlIntMult(left, right);
+		public static SqlExprInt operator /(SqlExprInt left, SqlExprInt right) => new SqlIntDiv(left, right);
+
+		public static SqlExprBool operator >(SqlExprInt left, SqlExprInt right) => new SqlIntGreaterThan(left, right);
+		public static SqlExprBool operator <(SqlExprInt left, SqlExprInt right) => new SqlIntLessThan(left, right);
+
+		public static SqlExprBool operator >=(SqlExprInt left, SqlExprInt right) => new SqlIntGreaterThanOrEqualTo(left, right);
+		public static SqlExprBool operator <=(SqlExprInt left, SqlExprInt right) => new SqlIntLessThanOrEqualTo(left, right);
 	}
 }

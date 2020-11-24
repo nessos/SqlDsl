@@ -20,11 +20,53 @@ namespace SqlDsl.Core
 				SqlBoolNot(SqlBoolValue(false)) => new SqlBoolValue(true),
 
 				// Int Optimizations
-				SqlIntAdd(SqlIntValue(var left), SqlIntValue(var right)) => new SqlIntValue(left + right),
+				SqlIntPlus(SqlIntValue(var value)) => new SqlIntValue(value),
+				SqlIntMinus(SqlIntValue(var value)) => new SqlIntValue(-value),
+				SqlIntAbs(SqlIntValue(var value)) => new SqlIntValue(value > 0 ? value : -value),
+
+				SqlIntGreaterThan(SqlIntValue(var left), SqlIntValue(var right)) => new SqlBoolValue(left > right),
+				SqlIntGreaterThan(var left, var right) => new SqlIntGreaterThan(OptimizeExpr(left) as SqlExprInt,
+					OptimizeExpr(right) as SqlExprInt),
+				SqlIntGreaterThanOrEqualTo(SqlIntValue(var left), SqlIntValue(var right)) => new SqlBoolValue(
+					left >= right),
+				SqlIntGreaterThanOrEqualTo(var left, var right) => new SqlIntGreaterThanOrEqualTo(
+					OptimizeExpr(left) as SqlExprInt,
+					OptimizeExpr(right) as SqlExprInt),
+				SqlIntLessThan(SqlIntValue(var left), SqlIntValue(var right)) => new SqlBoolValue(left < right),
+				SqlIntLessThan(var left, var right) => new SqlIntLessThan(OptimizeExpr(left) as SqlExprInt,
+					OptimizeExpr(right) as SqlExprInt),
+				SqlIntLessThanOrEqualTo(SqlIntValue(var left), SqlIntValue(var right)) => new SqlBoolValue(
+					left <= right),
+				SqlIntLessThanOrEqualTo(var left, var right) => new SqlIntLessThanOrEqualTo(
+					OptimizeExpr(left) as SqlExprInt,
+					OptimizeExpr(right) as SqlExprInt),
+
 				SqlIntAdd(var left, SqlIntValue(0)) => OptimizeExpr(left),
 				SqlIntAdd(SqlIntValue(0), var right) => OptimizeExpr(right),
+				SqlIntAdd(SqlIntValue(var left), SqlIntValue(var right)) => new SqlIntValue(left + right),
 				SqlIntAdd(var left, var right) => new SqlIntAdd(OptimizeExpr(left) as SqlExprInt,
 					OptimizeExpr(right) as SqlExprInt),
+
+				SqlIntSub(var left, SqlIntValue(0)) => OptimizeExpr(left),
+				SqlIntSub(SqlIntValue(0), var right) => OptimizeExpr(new SqlIntMinus(right)),
+				SqlIntSub(SqlIntValue(var left), SqlIntValue(var right)) => new SqlIntValue(left - right),
+				SqlIntSub(var left, var right) => new SqlIntSub(OptimizeExpr(left) as SqlExprInt,
+					OptimizeExpr(right) as SqlExprInt),
+
+				SqlIntMult(var left, SqlIntValue(1)) => OptimizeExpr(left),
+				SqlIntMult(SqlIntValue(1), var right) => OptimizeExpr(right),
+				SqlIntMult(_, SqlIntValue(0)) => new SqlIntValue(0),
+				SqlIntMult(SqlIntValue(0), _) => new SqlIntValue(0),
+				SqlIntMult(SqlIntValue(var left), SqlIntValue(var right)) => new SqlIntValue(left * right),
+				SqlIntMult(var left, var right) => new SqlIntMult(OptimizeExpr(left) as SqlExprInt,
+					OptimizeExpr(right) as SqlExprInt),
+
+				SqlIntDiv(SqlIntValue(0), _) => new SqlIntValue(0),
+				SqlIntDiv(var left, SqlIntValue(1)) => OptimizeExpr(left),
+				SqlIntDiv(var left, SqlIntValue(0) right) => new SqlIntDiv(OptimizeExpr(left) as SqlExprInt,
+					right),
+				SqlIntDiv(SqlIntValue(var left), SqlIntValue(var right)) => new SqlIntValue(left / right),
+
 				_ => expr
 			};
 
@@ -57,9 +99,16 @@ namespace SqlDsl.Core
 				SqlIntAdd(var left, var right) => $"({CompileExpr(left)} + {CompileExpr(right)})",
 				SqlIntSub(var left, var right) => $"({CompileExpr(left)} - {CompileExpr(right)})",
 				SqlIntMult(var left, var right) => $"({CompileExpr(left)} * {CompileExpr(right)})",
+				SqlIntDiv(var left, var right) => $"({CompileExpr(left)} / {CompileExpr(right)})",
+
 				SqlIntPlus(var value) => $"({CompileExpr(value)})",
 				SqlIntMinus(var value) => $"(-({CompileExpr(value)}))",
 				SqlIntAbs(var value) => $"(ABS({CompileExpr(value)}))",
+
+				SqlIntGreaterThan(var left, var right) => $"({CompileExpr(left)} > {CompileExpr(right)})",
+				SqlIntGreaterThanOrEqualTo(var left, var right) => $"({CompileExpr(left)} >= {CompileExpr(right)})",
+				SqlIntLessThan(var left, var right) => $"({CompileExpr(left)} < {CompileExpr(right)})",
+				SqlIntLessThanOrEqualTo(var left, var right) => $"({CompileExpr(left)} <= {CompileExpr(right)})",
 
 				_ => throw new Exception($"Not supported {expr}")
 			};
