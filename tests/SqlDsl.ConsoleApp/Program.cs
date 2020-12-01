@@ -12,17 +12,14 @@ namespace SqlDsl.ConsoleApp
         static void Main(string[] args)
         {
 
-            SqlExprInt leftSql = 1;
-            SqlExprInt rightSql = 2;
-
-            var sqlMult = leftSql / rightSql;
 
             var customers = (Table: "Customer", (Id: new SqlIntColumn("Id"), 
                                                  Age: new SqlIntColumn("Age")));
-            var query = customers.From();
+            var query = customers.From().Select(x => (Id: x.Id, Age: x.Age + 1));
+            // SELECT x.Id, x.Age + 1 FROM Customers x
             
-            Console.WriteLine(SqlCompiler.CompileOptimizedExpr(sqlMult));
-
+            Console.WriteLine(query.CompileSqlQuery());
+            
         }
     }
 }

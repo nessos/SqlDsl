@@ -1,7 +1,24 @@
 using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace SqlDsl.Core
 {
+
+	public class Projections : ITuple
+	{
+		private readonly SqlIntProjection[] projections;
+		public Projections(SqlIntProjection[] projections)
+		{
+			this.projections = projections;
+		}
+
+        public object this[int index] => projections[index];
+
+		public int Length => projections.Length;
+    }
+
 	public static class SqlCompiler
 	{
 		private static SqlExpr OptimizeExpr(SqlExpr expr) =>
@@ -123,11 +140,48 @@ namespace SqlDsl.Core
 				SqlIntLessThan(var left, var right) => $"({EmitExpr(left)} < {EmitExpr(right)})",
 				SqlIntLessThanOrEqualTo(var left, var right) => $"({EmitExpr(left)} <= {EmitExpr(right)})",
 
+				SqlIntProjection(var alias, var name) => $"{alias}.{name}",
+
 				_ => throw new Exception($"Not supported {expr}")
 			};
 
 		public static string CompileOptimizedExpr(this SqlExpr expr) => EmitExpr(MultiOptimizer(expr));
 
 		public static string CompileExpr(this SqlExpr expr) => EmitExpr(expr);
+
+
+		public static IEnumerable<SqlIntColumn> MapTuple(ITuple tuple)
+		{
+            for (int i = 0; i < tuple.Length; i++)
+            {
+				if (tuple[i] is SqlIntColumn sqlIntColumn)
+					yield return sqlIntColumn;
+            }
+		}
+
+		public static IEnumerable<SqlExpr> MapReturnTuple(ITuple tuple)
+		{
+			for (int i = 0; i < tuple.Length; i++)
+			{
+				if (tuple[i] is SqlExpr sqlExpr)
+					yield return sqlExpr;
+			}
+		}
+
+
+		public static string GenerateProjections(ITuple columns, Func<ITuple, ITuple> mapf)
+		{
+			var projections = MapTuple(columns).Select(x => new SqlIntProjection("x", x.Name)).ToArray();
+			var exprs = MapReturnTuple(mapf(new Projections(projections)));
+			return String.Join(", ", exprs.Select(x => CompileExpr(x)).ToArray());
+		}
+
+		public static string CompileSqlQuery(this SqlQuery query) =>
+			query switch
+			{
+				SelectClause(FromClause(var tableName, var columns), var mapf) => 
+					$"SELECT {GenerateProjections(columns, mapf)} FROM {tableName} x",
+				_ => throw new Exception($"Not supported {query}")
+			};
 	}
 }

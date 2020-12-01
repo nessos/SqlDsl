@@ -13,5 +13,13 @@ namespace SqlDsl.Core
         {
             return new FromClause<T>(table.Table, table.Columns);
         }
+
+        public static SqlQuery<R> Select<T, R>(this SqlQuery<T> query, Func<T, R> f)
+            where T : ITuple
+            where R : ITuple
+        {
+            return new SelectClause<T, R>(query, f);
+        }
+        
     }
 }
