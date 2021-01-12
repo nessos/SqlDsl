@@ -12,8 +12,9 @@ namespace SqlDsl.Core
     {
     }
 
-    public record FromClause(string Table, ITuple Columns) : SqlQuery;
-    public record FromClause<T>(string Table, ITuple Columns) : FromClause(Table, Columns), SqlQuery<T> where T : ITuple;
+    public record FromClause(SqlTable Table) : SqlQuery;
+    public record FromClause<T>(T FromTable) : FromClause(FromTable), SqlQuery<T> 
+        where T : SqlTable;
 
     public record SelectClause(SqlQuery Query, Func<ITuple, ITuple> Mapf) : SqlQuery;
     public record SelectClause<T, R>(SqlQuery<T> TypedQuery, Func<T, R> MapF) : SelectClause(TypedQuery, tuple => MapF((T)tuple)), SqlQuery<R> 

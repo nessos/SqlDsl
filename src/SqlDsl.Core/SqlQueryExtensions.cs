@@ -9,9 +9,9 @@ namespace SqlDsl.Core
 {
     public static class SqlQueryExtensions
     {
-        public static SqlQuery<T> From<T>(this (string Table, T Columns) table) where T : ITuple
+        public static SqlQuery<T> From<T>(this T table) where T : SqlTable
         {
-            return new FromClause<T>(table.Table, table.Columns);
+            return new FromClause<T>(table);
         }
 
         public static SqlQuery<R> Select<T, R>(this SqlQuery<T> query, Func<T, R> f)

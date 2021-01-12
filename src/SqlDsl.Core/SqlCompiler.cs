@@ -168,8 +168,8 @@ namespace SqlDsl.Core
 		public static string CompileSqlQuery(this SqlQuery query) =>
 			query switch
 			{
-				SelectClause(FromClause(var tableName, var columns), var mapf) => 
-					$"SELECT {GenerateProjections(columns, mapf)} FROM {tableName} x",
+				SelectClause(FromClause(var table), var mapf) => 
+					$"SELECT {GenerateProjections(table, mapf)} FROM {table.TableName} x",
 				_ => throw new Exception($"Not supported {query}")
 			};
 	}
