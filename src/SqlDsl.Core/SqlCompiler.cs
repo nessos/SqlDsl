@@ -6,18 +6,7 @@ using System.Runtime.CompilerServices;
 namespace SqlDsl.Core
 {
 
-	public class Projections : ITuple
-	{
-		private readonly SqlIntProjection[] projections;
-		public Projections(SqlIntProjection[] projections)
-		{
-			this.projections = projections;
-		}
 
-        public object this[int index] => projections[index];
-
-		public int Length => projections.Length;
-    }
 
 	public static class SqlCompiler
 	{
@@ -141,6 +130,7 @@ namespace SqlDsl.Core
 				SqlIntLessThanOrEqualTo(var left, var right) => $"({EmitExpr(left)} <= {EmitExpr(right)})",
 
 				SqlIntProjection(var alias, var name) => $"{alias}.{name}",
+				SqlIntColumn(var name) => $"x.{name}",
 
 				_ => throw new Exception($"Not supported {expr}")
 			};
@@ -171,8 +161,7 @@ namespace SqlDsl.Core
 
 		public static string GenerateProjections(ITuple columns, Func<ITuple, ITuple> mapf)
 		{
-			var projections = MapTuple(columns).Select(x => new SqlIntProjection("x", x.Name)).ToArray();
-			var exprs = MapReturnTuple(mapf(new Projections(projections)));
+			var exprs = MapReturnTuple(mapf(columns));
 			return String.Join(", ", exprs.Select(x => CompileExpr(x)).ToArray());
 		}
 

@@ -17,7 +17,7 @@ namespace SqlDsl.ConsoleApp
                                                  Age: new SqlIntColumn("Age")));
             var query = customers.From().Select(x => (Id: x.Id, Age: x.Age + 1));
             // SELECT x.Id, x.Age + 1 FROM Customers x
-            
+
             Console.WriteLine(query.CompileSqlQuery());
             
         }
