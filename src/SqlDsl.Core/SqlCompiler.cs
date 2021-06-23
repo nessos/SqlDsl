@@ -165,11 +165,19 @@ namespace SqlDsl.Core
 			return String.Join(", ", exprs.Select(x => CompileExpr(x)).ToArray());
 		}
 
+		public static string GenerateFiltering(ITuple columns, Func<ITuple, SqlExpr<SqlBool>> predf)
+		{
+			var expr = predf(columns);
+			return CompileExpr(expr);
+		}
+
 		public static string CompileSqlQuery(this SqlQuery query) =>
 			query switch
 			{
 				SelectClause(FromClause(var table), var mapf) => 
 					$"SELECT {GenerateProjections(table, mapf)} FROM {table.TableName} x",
+				WhereClause(FromClause(var table), var predf) =>
+					$"SELECT * FROM {table.TableName} x WHERE {GenerateFiltering(table, predf)}",
 				_ => throw new Exception($"Not supported {query}")
 			};
 	}

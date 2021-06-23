@@ -1,4 +1,4 @@
-using Microsoft.VisualBasic.CompilerServices;
+using System;
 
 namespace SqlDsl.Core
 {
@@ -34,6 +34,9 @@ namespace SqlDsl.Core
 	public abstract record SqlExprInt : SqlExpr<SqlInt>
 	{
 		public static implicit operator SqlExprInt(int x) => new SqlIntValue(x);
+		//public static SqlExprBool operator ==(SqlExprInt left, SqlExprInt right) => throw new System.NotImplementedException();
+		//public static SqlExprBool operator !=(SqlExprInt left, SqlExprInt right) => throw new System.NotImplementedException();
+
 		public static SqlExprInt operator +(SqlExprInt left, SqlExprInt right) => new SqlIntAdd(left, right);
 		public static SqlExprInt operator -(SqlExprInt left, SqlExprInt right) => new SqlIntSub(left, right);
 		public static SqlExprInt operator *(SqlExprInt left, SqlExprInt right) => new SqlIntMult(left, right);
