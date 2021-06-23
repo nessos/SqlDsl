@@ -17,7 +17,8 @@ namespace SqlDsl.ConsoleApp
 
             //var query = CustomerTable.From().Select(x => (Id: x.Id, Age: x.Age + 1));
             // SELECT x.Id, x.Age + 1 FROM Customers x
-            var query = CustomerTable.From().Where(x => x.Age > 42);
+            var query = CustomerTable.From().Where(x => x.Age > 42)
+                                            .Select(x => (Id: x.Id, Age: x.Age + 1));
 
 
             Console.WriteLine(query.CompileSqlQuery());

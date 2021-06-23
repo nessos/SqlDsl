@@ -178,6 +178,8 @@ namespace SqlDsl.Core
 					$"SELECT {GenerateProjections(table, mapf)} FROM {table.TableName} x",
 				WhereClause(FromClause(var table), var predf) =>
 					$"SELECT * FROM {table.TableName} x WHERE {GenerateFiltering(table, predf)}",
+				SelectClause(WhereClause(FromClause(var table), var predf), var mapf) =>
+					$"SELECT {GenerateProjections(table, mapf)} FROM {table.TableName} x WHERE {GenerateFiltering(table, predf)}",
 				_ => throw new Exception($"Not supported {query}")
 			};
 	}
