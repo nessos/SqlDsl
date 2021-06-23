@@ -20,6 +20,12 @@ namespace SqlDsl.Core
         {
             return new SelectClause<T, R>(query, f);
         }
-        
+
+        public static SqlQuery<T> Where<T>(this SqlQuery<T> query, Func<T, SqlExpr<SqlBool>> f)
+            where T : ITuple
+        {
+            return new WhereClause<T>(query, f);
+        }
+
     }
 }

@@ -20,4 +20,9 @@ namespace SqlDsl.Core
     public record SelectClause<T, R>(SqlQuery<T> TypedQuery, Func<T, R> MapF) : SelectClause(TypedQuery, tuple => MapF((T)tuple)), SqlQuery<R> 
         where T : ITuple
         where R : ITuple;
+
+    public record WhereClause(SqlQuery Query, Func<ITuple, SqlExpr<SqlBool>> Predf) : SqlQuery;
+    public record WhereClause<T>(SqlQuery<T> TypedQuery, Func<T, SqlExpr<SqlBool>> PredF) : WhereClause(TypedQuery, tuple => PredF((T)tuple)), SqlQuery<T>
+        where T : ITuple;
+
 }
